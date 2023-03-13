@@ -276,7 +276,49 @@ SHOTGUN
 // DEFAULT_SHOTGUN_SPREAD and DEFAULT_SHOTGUN_COUNT	are in bg_public.h, because
 // client predicts same spreads
 #define	DEFAULT_SHOTGUN_DAMAGE	10
+#define	NEW_SHOTGUN_DAMAGE	9
 
+struct hitShotgunTargets_s {
+    gentity_t *targets[MAX_SHOTGUN_COUNT];
+};
+
+static void UpdateShotgunHits(struct hitShotgunTargets_s *list, gentity_t *hittarg) {
+    int i;
+    if (!g_damagePlums.integer || !list || !hittarg) {
+        return;
+    }
+    for (i = 0; i < MAX_SHOTGUN_COUNT; i++) {
+        if (!list->targets[i]) {
+            list->targets[i] = hittarg;
+            if (hittarg->client) {
+                hittarg->client->shotgunDamagePlumDmg = 0;
+            }
+            return;
+        }
+        if (list->targets[i] == hittarg) {
+            return;
+        }
+    }
+}
+
+static void ShotgunDamagePlums(struct hitShotgunTargets_s *list, gentity_t *attacker) {
+    int i;
+    gentity_t *targ;
+
+    if (!g_damagePlums.integer) {
+        return;
+    }
+
+    for (i = 0; i < MAX_SHOTGUN_COUNT; i++) {
+        if (!list->targets[i]) {
+            return;
+        }
+        targ = list->targets[i];
+        if (targ != attacker && targ->client && targ->client->shotgunDamagePlumDmg > 0) {
+            DamagePlum(attacker, targ, MOD_SHOTGUN, targ->client->shotgunDamagePlumDmg);
+        }
+    }
+}
 static qboolean ShotgunPellet( const vec3_t start, const vec3_t end, gentity_t *ent ) {
 	trace_t		tr;
 	int			damage, i, passent;
@@ -359,7 +401,7 @@ static void ShotgunPattern( const vec3_t origin, const vec3_t origin2, int seed,
 			ent->client->accuracy_hits++;
 		}
 	}
-
+    //ShotgunDamagePlums(&hitTargets, ent);
 	// unlagged
 	G_UndoTimeShiftFor( ent );
 }

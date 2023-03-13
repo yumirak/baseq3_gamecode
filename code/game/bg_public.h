@@ -20,6 +20,8 @@
 
 #define DEFAULT_SHOTGUN_SPREAD	700
 #define DEFAULT_SHOTGUN_COUNT	11
+#define NEW_SHOTGUN_COUNT	12
+#define MAX_SHOTGUN_COUNT	NEW_SHOTGUN_COUNT
 
 #define	ITEM_RADIUS			15		// item sizes are needed for client side pickup detection
 
@@ -424,7 +426,7 @@ typedef enum {
 
 	EV_GIB_PLAYER,			// gib a previously living player
 	EV_SCOREPLUM,			// score plum
-
+    EV_DAMAGEPLUM,          // rat :damageplums
 //#ifdef MISSIONPACK
 	EV_PROXIMITY_MINE_STICK,
 	EV_PROXIMITY_MINE_TRIGGER,

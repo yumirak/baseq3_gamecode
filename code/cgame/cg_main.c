@@ -163,6 +163,10 @@ vmCvar_t	cg_noVoiceText;
 #endif
 vmCvar_t	cg_hudFiles;
 vmCvar_t 	cg_scorePlum;
+//rat
+vmCvar_t 	cg_damagePlums;
+vmCvar_t 	cg_damagePlumSize;
+//
 vmCvar_t 	cg_smoothClients;
 vmCvar_t	cg_cameraMode;
 vmCvar_t	cg_cameraOrbit;
@@ -312,6 +316,10 @@ static const cvarTable_t cvarTable[] = {
 	{ &cg_timescaleFadeSpeed, "cg_timescaleFadeSpeed", "0", 0},
 	{ &cg_timescale, "timescale", "1", 0},
 	{ &cg_scorePlum, "cg_scorePlums", "1", CVAR_USERINFO | CVAR_ARCHIVE},
+    // rat
+    { &cg_damagePlums, "cg_damagePlums", "1", CVAR_USERINFO | CVAR_ARCHIVE},
+    { &cg_damagePlumSize, "cg_damagePlumSize", "8.0", CVAR_ARCHIVE},
+    // end rat
 	{ &cg_smoothClients, "cg_smoothClients", "0", CVAR_USERINFO | CVAR_ARCHIVE},
 	{ &cg_cameraMode, "com_cameraMode", "0", CVAR_CHEAT},
 	{ &cg_noTaunt, "cg_noTaunt", "0", CVAR_ARCHIVE},

@@ -238,7 +238,7 @@ typedef struct {
 	qboolean	teamInfo;			// send team overlay updates?
 	int			voted;
 	int			teamVoted;
-
+    int			damagePlums; //rat damage plums
 	qboolean	inGame;
 } clientPersistant_t;
 
@@ -334,6 +334,7 @@ struct gclient_s {
 		int		enemy;
 		int		amount;
 	} damage;
+    int	shotgunDamagePlumDmg; //rat damage plums
 };
 
 
@@ -526,11 +527,12 @@ const char *BuildShaderStateConfig( void );
 // g_combat.c
 //
 qboolean CanDamage (gentity_t *targ, vec3_t origin);
-void G_Damage (gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t dir, vec3_t point, int damage, int dflags, int mod);
 qboolean G_RadiusDamage (vec3_t origin, gentity_t *attacker, float damage, float radius, gentity_t *ignore, int mod);
 int G_InvulnerabilityEffect( gentity_t *targ, vec3_t dir, vec3_t point, vec3_t impactpoint, vec3_t bouncedir );
 void body_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, int meansOfDeath );
 void TossClientItems( gentity_t *self );
+void DamagePlum( gentity_t *ent, gentity_t *target, int mod, int damage ); // rat damageplum
+void G_Damage (gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t dir, vec3_t point, int damage, int dflags, int mod);
 #ifdef MISSIONPACK
 void TossClientPersistantPowerups( gentity_t *self );
 #endif
@@ -808,7 +810,7 @@ extern	vmCvar_t	g_enableDust;
 extern	vmCvar_t	g_enableBreath;
 extern	vmCvar_t	g_singlePlayer;
 extern	vmCvar_t	g_proxMineTimeout;
-
+extern  vmCvar_t    g_damagePlums; //rat damageplum
 void	trap_Print( const char *text );
 void	trap_Error( const char *text );
 int		trap_Milliseconds( void );
