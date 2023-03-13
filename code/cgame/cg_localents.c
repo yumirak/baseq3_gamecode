@@ -944,6 +944,7 @@ void CG_AddDamagePlum( localEntity_t *le ) {
 
     for (i = 0; i < numdigits; i++) {
         VectorMA(origin, ((float)numdigits / 2.0 - 0.5 - (float) i) * size, vec, re->origin);
+        // damage plums still using old quake3 font
         re->customShader = cgs.media.numberShaders[digits[numdigits-1-i]];
         trap_R_AddRefEntityToScene( re );
 
