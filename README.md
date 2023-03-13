@@ -1,3 +1,21 @@
+# things done so far
+    * Quakelive-like damage plums
+    * Upscale font 
+    * Weaponbar adjustment
+# TODO
+    * Vampiric Damage ( g_vampire )
+    * Clan Arena 
+    * Green Armor and QL HMG
+  
+ #  CREDITS:
+ OpenArena ( https://github.com/OpenArena/gamecode )
+ Ratmod ( https://github.com/rdntcntrl/ratoa_gamecode )
+  - Damage Plum 
+ Aftershock ( https://github.com/zturtleman/oaunofficial )
+  - Damage Plum Font
+---------------------------------------------
+original readme
+---------------------------------------------
 # baseq3a
 
 Unofficial Quake III Arena gamecode patch
