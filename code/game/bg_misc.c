@@ -1341,6 +1341,7 @@ const char *eventnames[EV_MAX] = {
 
 	"EV_GIB_PLAYER",			// gib a previously living player
 	"EV_SCOREPLUM",			// score plum
+    "EV_DAMAGEPLUM",        // rat: damageplum
 
 //#ifdef MISSIONPACK
 	"EV_PROXIMITY_MINE_STICK",

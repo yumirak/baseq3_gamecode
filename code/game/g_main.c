@@ -64,6 +64,7 @@ vmCvar_t	g_unlagged;
 vmCvar_t	pmove_fixed;
 vmCvar_t	pmove_msec;
 vmCvar_t	g_listEntity;
+vmCvar_t    g_damagePlums; // rat damageplums
 #ifdef MISSIONPACK
 vmCvar_t	g_obeliskHealth;
 vmCvar_t	g_obeliskRegenPeriod;
@@ -124,6 +125,7 @@ static cvarTable_t gameCvarTable[] = {
 
 	{ &g_speed, "g_speed", "320", 0, 0, qtrue  },
 	{ &g_gravity, "g_gravity", "800", 0, 0, qtrue  },
+    { &g_damagePlums, "g_damagePlums", "1", CVAR_ARCHIVE, 0, qfalse }, // rat damageplum
 	{ &g_knockback, "g_knockback", "1000", 0, 0, qtrue  },
 	{ &g_quadfactor, "g_quadfactor", "3", 0, 0, qtrue  },
 	{ &g_weaponRespawn, "g_weaponrespawn", "5", 0, 0, qtrue  },

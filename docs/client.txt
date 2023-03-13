@@ -3,6 +3,19 @@
 ****************************************************
 
 ========================
+cg_damageplums <0|1|2>
+
+    0 - disabled
+    1 - enable for all weapon
+    2 - enable except MG and LG
+
+    print a plum-size damage a client dealt to enemy
+
+cg_damageplumSize <pixelsize>
+
+   set how big plums size
+
+========================
 cg_followKiller <0|1>
 
 
@@ -52,6 +65,9 @@ cg_enemyColors [colorstring]
 
     !!! will work only if cg_enemyModel is set !!!
 
+    examples:
+    cg_enemyColors 22222 - make enemy color green
+    cg_enemyColors 66666 - make enemy color cyan
 
 ========================
 cg_teamModel  [ pm | modelname ]
@@ -67,6 +83,9 @@ cg_teamColors [colorstring]
     colorstring[4] and [5] will ALWAYS override color1 and color2 for spectated client
 
     but head, torso and legs colors will work corectly only if cg_teamModel is set
+    examples:
+    cg_teamColors 22222 - make team color green
+    cg_teamColors 66666 - make team color cyan
 
 
 ========================
