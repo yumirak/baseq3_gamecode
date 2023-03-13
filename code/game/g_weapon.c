@@ -269,7 +269,7 @@ void BFG_Fire( gentity_t *ent ) {
 ======================================================================
 
 SHOTGUN
-
+ rat damageplums
 ======================================================================
 */
 
@@ -300,7 +300,7 @@ static void UpdateShotgunHits(struct hitShotgunTargets_s *list, gentity_t *hitta
         }
     }
 }
-
+// rat damageplums
 static void ShotgunDamagePlums(struct hitShotgunTargets_s *list, gentity_t *attacker) {
     int i;
     gentity_t *targ;
@@ -319,91 +319,98 @@ static void ShotgunDamagePlums(struct hitShotgunTargets_s *list, gentity_t *atta
         }
     }
 }
-static qboolean ShotgunPellet( const vec3_t start, const vec3_t end, gentity_t *ent ) {
-	trace_t		tr;
-	int			damage, i, passent;
-	gentity_t	*traceEnt;
+// rat damageplums
+static qboolean ShotgunPellet( const vec3_t start, const vec3_t end, gentity_t *ent ,struct hitShotgunTargets_s *hitTargets) {
+    trace_t		tr;
+    int			damage, i, passent;
+    gentity_t	*traceEnt;
 #ifdef MISSIONPACK
-	vec3_t		impactpoint, bouncedir;
+    vec3_t		impactpoint, bouncedir;
 #endif
-	vec3_t		tr_start, tr_end;
-	qboolean	hitClient = qfalse;
+    vec3_t		tr_start, tr_end;
+    qboolean	hitClient = qfalse;
 
-	passent = ent->s.number;
-	VectorCopy( start, tr_start );
-	VectorCopy( end, tr_end );
+    passent = ent->s.number;
+    VectorCopy( start, tr_start );
+    VectorCopy( end, tr_end );
 
-	for ( i = 0; i < 10; i++ ) {
-		trap_Trace( &tr, tr_start, NULL, NULL, tr_end, passent, MASK_SHOT );
-		traceEnt = &g_entities[ tr.entityNum ];
+    for ( i = 0; i < 10; i++ ) {
+        trap_Trace( &tr, tr_start, NULL, NULL, tr_end, passent, MASK_SHOT );
+        traceEnt = &g_entities[ tr.entityNum ];
 
-		// send bullet impact
-		if (  tr.surfaceFlags & SURF_NOIMPACT ) {
-			return qfalse;
-		}
+        // send bullet impact
+        if (  tr.surfaceFlags & SURF_NOIMPACT ) {
+            return qfalse;
+        }
 
-		if ( traceEnt->takedamage ) {
-			damage = DEFAULT_SHOTGUN_DAMAGE * s_quadFactor;
+        if ( traceEnt->takedamage ) {
+            damage = DEFAULT_SHOTGUN_DAMAGE * s_quadFactor;
 #ifdef MISSIONPACK
-			if ( traceEnt->client && traceEnt->client->invulnerabilityTime > level.time ) {
-				if (G_InvulnerabilityEffect( traceEnt, forward, tr.endpos, impactpoint, bouncedir )) {
-					G_BounceProjectile( tr_start, impactpoint, bouncedir, tr_end );
-					VectorCopy( impactpoint, tr_start );
-					// the player can hit him/herself with the bounced rail
-					passent = ENTITYNUM_NONE;
-				}
-				else {
-					VectorCopy( tr.endpos, tr_start );
-					passent = traceEnt->s.number;
-				}
-				continue;
-			}
+            if ( traceEnt->client && traceEnt->client->invulnerabilityTime > level.time ) {
+                if (G_InvulnerabilityEffect( traceEnt, forward, tr.endpos, impactpoint, bouncedir )) {
+                    G_BounceProjectile( tr_start, impactpoint, bouncedir, tr_end );
+                    VectorCopy( impactpoint, tr_start );
+                    // the player can hit him/herself with the bounced rail
+                    passent = ENTITYNUM_NONE;
+                }
+                else {
+                    VectorCopy( tr.endpos, tr_start );
+                    passent = traceEnt->s.number;
+                }
+                continue;
+            }
 #else
-			if ( LogAccuracyHit( traceEnt, ent ) ) {
-				hitClient = qtrue;
-			}
-			G_Damage( traceEnt, ent, ent, forward, tr.endpos, damage, 0, MOD_SHOTGUN );
-			return hitClient;
+            if ( LogAccuracyHit( traceEnt, ent ) ) {
+                hitClient = qtrue;
+            }
+            UpdateShotgunHits(hitTargets, traceEnt);
+            G_Damage( traceEnt, ent, ent, forward, tr.endpos, damage, 0, MOD_SHOTGUN );
+            return hitClient;
 #endif
-		}
-		return qfalse;
-	}
-	return qfalse;
+        }
+        return qfalse;
+    }
+    return qfalse;
 }
 
 
 // this should match CG_ShotgunPattern
+// rat damageplums
 static void ShotgunPattern( const vec3_t origin, const vec3_t origin2, int seed, gentity_t *ent ) {
-	int			i;
-	float		r, u;
-	vec3_t		end;
-	vec3_t		forward, right, up;
-	qboolean	hitClient = qfalse;
+    int			i;
+    float		r, u;
+    vec3_t		end;
+    vec3_t		forward, right, up;
+    qboolean	hitClient = qfalse;
+    qboolean	hitAll = qtrue;
+    struct hitShotgunTargets_s hitTargets;
 
-	// derive the right and up vectors from the forward vector, because
-	// the client won't have any other information
-	VectorNormalize2( origin2, forward );
-	PerpendicularVector( right, forward );
-	CrossProduct( forward, right, up );
+    memset(&hitTargets, 0, sizeof(hitTargets));
+    // derive the right and up vectors from the forward vector, because
+    // the client won't have any other information
+    VectorNormalize2( origin2, forward );
+    PerpendicularVector( right, forward );
+    CrossProduct( forward, right, up );
 
-	// unlagged
-	G_DoTimeShiftFor( ent );
+    // unlagged
+    G_DoTimeShiftFor( ent );
 
-	// generate the "random" spread pattern
-	for ( i = 0 ; i < DEFAULT_SHOTGUN_COUNT ; i++ ) {
-		r = Q_crandom( &seed ) * DEFAULT_SHOTGUN_SPREAD * 16;
-		u = Q_crandom( &seed ) * DEFAULT_SHOTGUN_SPREAD * 16;
-		VectorMA( origin, ( 8192.0 * 16.0 ), forward, end );
-		VectorMA( end, r, right, end );
-		VectorMA( end, u, up, end );
-		if ( ShotgunPellet( origin, end, ent ) && !hitClient ) {
-			hitClient = qtrue;
-			ent->client->accuracy_hits++;
-		}
-	}
+    // generate the "random" spread pattern
+    for ( i = 0 ; i < DEFAULT_SHOTGUN_COUNT ; i++ ) {
+        r = Q_crandom( &seed ) * DEFAULT_SHOTGUN_SPREAD * 16;
+        u = Q_crandom( &seed ) * DEFAULT_SHOTGUN_SPREAD * 16;
+        VectorMA( origin, ( 8192.0 * 16.0 ), forward, end );
+        VectorMA( end, r, right, end );
+        VectorMA( end, u, up, end );
+        if ( ShotgunPellet( origin, end, ent ,&hitTargets ) && !hitClient ) {
+            hitClient = qtrue;
+            ent->client->accuracy_hits++;
+        }
+    }
+    ShotgunDamagePlums(&hitTargets, ent);
     //ShotgunDamagePlums(&hitTargets, ent);
-	// unlagged
-	G_UndoTimeShiftFor( ent );
+    // unlagged
+    G_UndoTimeShiftFor( ent );
 }
 
 
