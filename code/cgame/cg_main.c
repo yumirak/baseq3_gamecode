@@ -207,6 +207,7 @@ vmCvar_t	cg_teamColors;
 vmCvar_t	cg_deadBodyDarken;
 vmCvar_t	cg_fovAdjust;
 vmCvar_t	cg_followKiller;
+vmCvar_t	cg_bobGun; // rat : bobgun
 
 typedef struct {
 	vmCvar_t	*vmCvar;
@@ -319,6 +320,7 @@ static const cvarTable_t cvarTable[] = {
     // rat
     { &cg_damagePlums, "cg_damagePlums", "1", CVAR_USERINFO | CVAR_ARCHIVE},
     { &cg_damagePlumSize, "cg_damagePlumSize", "8.0", CVAR_ARCHIVE},
+    { &cg_bobGun ,"cg_bobGun", "0", CVAR_ARCHIVE},
     // end rat
 	{ &cg_smoothClients, "cg_smoothClients", "0", CVAR_USERINFO | CVAR_ARCHIVE},
 	{ &cg_cameraMode, "com_cameraMode", "0", CVAR_CHEAT},

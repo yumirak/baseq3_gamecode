@@ -935,7 +935,9 @@ static void CG_CalculateWeaponPosition( vec3_t origin, vec3_t angles ) {
 
 	VectorCopy( cg.refdef.vieworg, origin );
 	VectorCopy( cg.refdefViewAngles, angles );
-
+    if (!cg_bobGun.integer) {
+            return;
+    }
 	// on odd legs, invert some angles
 	if ( cg.bobcycle & 1 ) {
 		scale = -cg.xyspeed;
@@ -1220,9 +1222,9 @@ CG_AddWeaponWithPowerups
 */
 static void CG_AddWeaponWithPowerups( refEntity_t *gun, int powerups ) {
 	// add powerup effects
-	if ( powerups & ( 1 << PW_INVIS ) ) {
+    if ( powerups & ( 1 << PW_INVIS ) ||  cg_drawGun.integer == 2 ) {
 		gun->customShader = cgs.media.invisShader;
-		trap_R_AddRefEntityToScene( gun );
+        trap_R_AddRefEntityToScene( gun ); // cg_drawgun
 	} else {
 		trap_R_AddRefEntityToScene( gun );
 
