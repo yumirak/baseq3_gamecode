@@ -602,14 +602,14 @@ static void CG_DrawStatusBar( void ) {
 					   cg_weapons[ cent->currentState.weapon ].ammoModel, 0, origin, angles );
 	}
 
-	CG_DrawStatusBarHead( 185 + CHAR_WIDTH*3 + TEXT_ICON_SPACE );
+
 
 	if( cg.predictedPlayerState.powerups[PW_REDFLAG] ) {
-		CG_DrawStatusBarFlag( 185 + CHAR_WIDTH*3 + TEXT_ICON_SPACE + ICON_SIZE, TEAM_RED );
+        CG_DrawStatusBarFlag( 185 + CHAR_WIDTH*3 + TEXT_ICON_SPACE + ICON_SIZE, TEAM_RED );
 	} else if( cg.predictedPlayerState.powerups[PW_BLUEFLAG] ) {
-		CG_DrawStatusBarFlag( 185 + CHAR_WIDTH*3 + TEXT_ICON_SPACE + ICON_SIZE, TEAM_BLUE );
+        CG_DrawStatusBarFlag( 185 + CHAR_WIDTH*3 + TEXT_ICON_SPACE + ICON_SIZE, TEAM_BLUE );
 	} else if( cg.predictedPlayerState.powerups[PW_NEUTRALFLAG] ) {
-		CG_DrawStatusBarFlag( 185 + CHAR_WIDTH*3 + TEXT_ICON_SPACE + ICON_SIZE, TEAM_FREE );
+        CG_DrawStatusBarFlag( 185 + CHAR_WIDTH*3 + TEXT_ICON_SPACE + ICON_SIZE, TEAM_FREE );
 	}
 
 	if ( ps->stats[ STAT_ARMOR ] ) {
@@ -617,7 +617,7 @@ static void CG_DrawStatusBar( void ) {
 		origin[1] = 0;
 		origin[2] = -10;
 		angles[YAW] = ( cg.time & 2047 ) * 360 / 2048.0;
-		CG_Draw3DModel( 370 + CHAR_WIDTH*3 + TEXT_ICON_SPACE, y, ICON_SIZE, ICON_SIZE,
+        CG_Draw3DModel( 370 + CHAR_WIDTH*3 + TEXT_ICON_SPACE, y, ICON_SIZE, ICON_SIZE,
 					   cgs.media.armorModel, 0, origin, angles );
 	}
 #ifdef MISSIONPACK
@@ -653,7 +653,7 @@ static void CG_DrawStatusBar( void ) {
 			}
 #ifdef USE_NEW_FONT_RENDERER
 			CG_SelectFont( 1 );
-			CG_DrawString( CHAR_WIDTH*3, y, va( "%i", value ), colors[ color ], CHAR_WIDTH, CHAR_HEIGHT, 0, DS_RIGHT | DS_PROPORTIONAL );
+            CG_DrawString( CHAR_WIDTH*3, y, va( "%i", value ), colors[ color ], CHAR_WIDTH, CHAR_HEIGHT, 0, DS_SHADOW |DS_RIGHT | DS_PROPORTIONAL );
 			CG_SelectFont( 0 );
 #else
 			trap_R_SetColor( colors[color] );
@@ -686,10 +686,11 @@ static void CG_DrawStatusBar( void ) {
 	} else {
 		color = 1; // red
 	}
-
+    CG_DrawStatusBarHead( 185 + CHAR_WIDTH*3 + TEXT_ICON_SPACE );
+    //CG_DrawPic( 185 + CHAR_WIDTH*3 + TEXT_ICON_SPACE, y, ICON_SIZE, ICON_SIZE, cgs.media.healthIcon );
 #ifdef USE_NEW_FONT_RENDERER
 	CG_SelectFont( 1 );
-	CG_DrawString( 185 + CHAR_WIDTH*3, y, va( "%i", value ), colors[ color ], CHAR_WIDTH, CHAR_HEIGHT, 0, DS_RIGHT | DS_PROPORTIONAL );
+    CG_DrawString( 185 + CHAR_WIDTH*3, y, va( "%i", value ), colors[ color ], CHAR_WIDTH, CHAR_HEIGHT, 0, DS_SHADOW | DS_RIGHT | DS_PROPORTIONAL );
 	CG_SelectFont( 0 );
 #else
 	trap_R_SetColor( colors[ color ] );
@@ -707,7 +708,7 @@ static void CG_DrawStatusBar( void ) {
 	if ( value > 0 ) {
 #ifdef USE_NEW_FONT_RENDERER
 		CG_SelectFont( 1 );
-		CG_DrawString( 370 + CHAR_WIDTH*3, y, va( "%i", value ), colors[ color ], CHAR_WIDTH, CHAR_HEIGHT, 0, DS_RIGHT | DS_PROPORTIONAL );
+        CG_DrawString( 370 + CHAR_WIDTH*3, y, va( "%i", value ), colors[ color ], CHAR_WIDTH, CHAR_HEIGHT, 0, DS_SHADOW | DS_RIGHT | DS_PROPORTIONAL );
 		CG_SelectFont( 0 );
 #else
 		trap_R_SetColor( colors[0] );
@@ -716,7 +717,7 @@ static void CG_DrawStatusBar( void ) {
 		trap_R_SetColor( NULL );
 		// if we didn't draw a 3D icon, draw a 2D icon for armor
 		if ( !cg_draw3dIcons.integer && cg_drawIcons.integer ) {
-			CG_DrawPic( 370 + CHAR_WIDTH*3 + TEXT_ICON_SPACE, y, ICON_SIZE, ICON_SIZE, cgs.media.armorIcon );
+            CG_DrawPic( 370 + CHAR_WIDTH*3 + TEXT_ICON_SPACE, y, ICON_SIZE, ICON_SIZE, cgs.media.armorIcon );
 		}
 	}
 
@@ -821,7 +822,7 @@ static float CG_DrawSpeedMeter( float y ) {
 		return y;
 	}
 
-	s = va( "%1.0fups", cg.xyspeed );
+    s = va( "%1.0f", cg.xyspeed );
 
 	if ( cg_drawSpeed.integer == 1 ) {
 		/* top left-hand corner of screen */
@@ -886,7 +887,7 @@ static float CG_DrawFPS( float y ) {
 		}
 		fps = 1000 * FPS_FRAMES / total;
 
-		s = va( "%ifps", fps );
+        s = va( "%iFPS", fps );
 		CG_DrawString( cgs.screenXmax - 4, y + 2, s, colorWhite, BIGCHAR_WIDTH, BIGCHAR_HEIGHT, 0, DS_SHADOW | DS_RIGHT | DS_PROPORTIONAL );
 	}
 
@@ -1364,7 +1365,8 @@ static float CG_DrawPowerups( float y ) {
 			y -= ICON_SIZE;
 
 			trap_R_SetColor( colors[color] );
-			CG_DrawField( x, y, 2, sortedTime[ i ] / 1000 );
+            //CG_DrawField( x, y, 2, sortedTime[ i ] / 1000 );
+            CG_DrawString( x  + ICON_SIZE / 2, y, va( "%i", sortedTime[ i ] / 1000 ), colors[ color ], CHAR_WIDTH, CHAR_HEIGHT, 0, DS_SHADOW | DS_CENTER | DS_PROPORTIONAL );
 
 			t = ps->powerups[ sorted[i] ];
 			if ( t - cg.time >= POWERUP_BLINKS * POWERUP_BLINK_TIME ) {
@@ -1648,7 +1650,7 @@ static void CG_DrawReward( void ) {
 		x = 320 - ICON_SIZE/2;
 		CG_DrawPic( x, y, ICON_SIZE-4, ICON_SIZE-4, cg.rewardShader[0] );
 		Com_sprintf( buf, sizeof( buf ), "%d", cg.rewardCount[0] );
-		CG_DrawString( 320, y + ICON_SIZE, buf, color, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0, DS_SHADOW | DS_CENTER );
+        CG_DrawString( 320, y + ICON_SIZE, buf, color, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0, DS_SHADOW | DS_CENTER );
 	}
 	else {
 
@@ -2332,11 +2334,11 @@ static qboolean CG_DrawFollow( void ) {
 		return qfalse;
 	}
 
-	CG_DrawString( 320, cgs.screenYmin + 24, "following", colorWhite, BIGCHAR_WIDTH, BIGCHAR_HEIGHT, 0, DS_CENTER | DS_SHADOW );
+    //CG_DrawString( 320, cgs.screenYmin + 24, "following", colorWhite, BIGCHAR_WIDTH, BIGCHAR_HEIGHT, 0, DS_CENTER | DS_SHADOW );
 
 	name = cgs.clientinfo[ cg.snap->ps.clientNum ].name;
 
-	CG_DrawString( 320, cgs.screenYmin + 40, name, colorWhite, GIANT_WIDTH, GIANT_HEIGHT, 0, DS_FORCE_COLOR | DS_SHADOW | DS_CENTER );
+    CG_DrawString( 320, cgs.screenYmin + 40, name, colorWhite, BIGCHAR_WIDTH, BIGCHAR_HEIGHT, 0, DS_FORCE_COLOR | DS_SHADOW | DS_CENTER | DS_PROPORTIONAL);
 
 	return qtrue;
 }
@@ -2732,7 +2734,7 @@ static void CG_WarmupEvents( void ) {
 				trap_S_StartLocalSound( cgs.media.countFightSound, CHAN_ANNOUNCER );
 				cg.warmupFightSound = cg.time + 750;
 			}
-			CG_CenterPrint( "FIGHT!", 120, GIANTCHAR_WIDTH*2 );
+            CG_CenterPrint( "FIGHT!", 120, GIANTCHAR_WIDTH );
 			break;
 
 		case 1:

@@ -998,7 +998,7 @@ static void CG_RegisterGraphics( void ) {
 		cgs.media.blueKamikazeShader = trap_R_RegisterShader( "models/weaphits/kamikblu" );
 #endif
 	}
-
+    cgs.media.healthIcon  = trap_R_RegisterShaderNoMip( "icons/iconh_yellow" );
 	cgs.media.armorModel = trap_R_RegisterModel( "models/powerups/armor/armor_yel.md3" );
 	cgs.media.armorIcon  = trap_R_RegisterShaderNoMip( "icons/iconr_yellow" );
 

@@ -1526,6 +1526,7 @@ WEAPON SELECTION
 CG_DrawWeaponSelect
 ===================
 */
+#define W_ICON_SIZE 24
 #define AMMO_FONT_SIZE 12
 void CG_DrawWeaponSelect( void ) {
 	int		i;
@@ -1570,13 +1571,13 @@ void CG_DrawWeaponSelect( void ) {
 	if ( weaponSelect < 3 ) {
 		x = 320 - count * 20;
 		y = cgs.screenYmax + 1 - 100; // - STATUSBAR_HEIGHT - 40
-		dx = 40;
+        dx = 30;
 		dy = 0;
 	} else {
 		x = cgs.screenXmin + 6;
 		y = 240 - count * 20;
 		dx = 0;
-		dy = 40;
+        dy = 30;
 	}
 
 	for ( i = WP_GAUNTLET ; i < MAX_WEAPONS ; i++ ) {
@@ -1587,25 +1588,25 @@ void CG_DrawWeaponSelect( void ) {
 		CG_RegisterWeapon( i );
 
 		// draw weapon icon
-		CG_DrawPic( x, y, 32, 32, cg_weapons[i].weaponIcon );
+        CG_DrawPic( x, y, W_ICON_SIZE, W_ICON_SIZE, cg_weapons[i].weaponIcon );
 
 		// draw selection marker
 		if ( i == cg.weaponSelect ) {
-			CG_DrawPic( x-4, y-4, 32+8, 32+8, cgs.media.selectShader );
+            CG_DrawPic( x-4, y-4, W_ICON_SIZE+8, W_ICON_SIZE+8, cgs.media.selectShader );
 		}
 
 		// no ammo cross on top
 		if ( !cg.snap->ps.ammo[ i ] ) {
-			CG_DrawPic( x, y, 32, 32, cgs.media.noammoShader );
+            CG_DrawPic( x, y, W_ICON_SIZE, W_ICON_SIZE, cgs.media.noammoShader );
 		} else if ( weaponSelect > 1 && cg.snap->ps.ammo[ i ] > 0 ) {
 			// ammo counter
 			BG_sprintf( buf, "%i", cg.snap->ps.ammo[ i ] );
 			if ( weaponSelect == 2 ) {
 				// horizontal ammo counters
-				CG_DrawString( x + 32/2, y - 20, buf, color, AMMO_FONT_SIZE, AMMO_FONT_SIZE, 0, DS_CENTER | DS_PROPORTIONAL );
+                CG_DrawString( x + W_ICON_SIZE/2, y - 20, buf, color, AMMO_FONT_SIZE, AMMO_FONT_SIZE, 0, DS_CENTER | DS_PROPORTIONAL );
 			} else {
 				// vectical ammo counters
-				CG_DrawString( x + 39 + (3*AMMO_FONT_SIZE), y + (32-AMMO_FONT_SIZE)/2, buf, color, AMMO_FONT_SIZE, AMMO_FONT_SIZE, 0, DS_RIGHT );
+                CG_DrawString( x + (W_ICON_SIZE * 1.5) + (3*AMMO_FONT_SIZE), y + (W_ICON_SIZE-AMMO_FONT_SIZE)/2, buf, color, AMMO_FONT_SIZE, AMMO_FONT_SIZE, 0, DS_RIGHT );
 			}
 		}
 

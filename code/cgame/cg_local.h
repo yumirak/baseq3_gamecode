@@ -733,7 +733,7 @@ typedef struct {
 	qhandle_t	harvesterBlueSkin;
 	qhandle_t	harvesterNeutralModel;
 #endif
-
+    qhandle_t	healthIcon;
 	qhandle_t	armorModel;
 	qhandle_t	armorIcon;
 
