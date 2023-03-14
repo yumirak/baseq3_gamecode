@@ -580,11 +580,11 @@ static void CG_DrawStatusBar( void ) {
 		return;
 	}
 
-	// draw the team background
+    /* draw the team background
 	CG_DrawTeamBackground( cgs.screenXmin, cgs.screenYmax - STATUSBAR_HEIGHT + 1,
 		cgs.screenXmax - cgs.screenXmin + 1, STATUSBAR_HEIGHT, 
 		0.33f, cg.snap->ps.persistant[ PERS_TEAM ] );
-
+    */
 	y = cgs.screenYmax + 1 - ICON_SIZE;
 
 	cent = &cg_entities[cg.snap->ps.clientNum];
@@ -1431,12 +1431,18 @@ static int CG_DrawPickupItem( int y ) {
 	int		value;
 	float	*fadeColor;
 	const char *text;
+    int			mins, seconds, msec;
 
 	if ( cg.snap->ps.stats[STAT_HEALTH] <= 0 ) {
 		return y;
 	}
 
 	y -= PICKUP_ICON_SIZE;
+    msec = cg.itemPickupTime - cgs.levelStartTime;
+
+    seconds = msec / 1000;
+    mins = seconds / 60;
+    seconds -= mins * 60;
 
 	value = cg.itemPickup;
 	if ( value ) {
@@ -1444,13 +1450,13 @@ static int CG_DrawPickupItem( int y ) {
 		if ( fadeColor ) {
 			CG_RegisterItemVisuals( value );
 			trap_R_SetColor( fadeColor );
-			CG_DrawPic( cgs.screenXmin + 8, y, PICKUP_ICON_SIZE, PICKUP_ICON_SIZE, cg_items[ value ].icon );
-			if ( cg.itemPickupCount > 1 ) {
-				text = va( "%s x%i", bg_itemlist[ value ].pickup_name, cg.itemPickupCount );
-			} else {
-				text = bg_itemlist[ value ].pickup_name;
-			}
 
+            //if ( cg.itemPickupCount > 1 ) {
+                text = va( "%s x%i %i:%02i", bg_itemlist[ value ].pickup_name, cg.itemPickupCount ,mins, seconds );
+            //} else {
+                //text = bg_itemlist[ value ].pickup_name;
+            //}
+            CG_DrawPic( cgs.screenXmin + 8, y, PICKUP_ICON_SIZE, PICKUP_ICON_SIZE, cg_items[ value ].icon );
 			CG_DrawString( cgs.screenXmin + PICKUP_ICON_SIZE + 16, y + (PICKUP_ICON_SIZE/2 - PICKUP_TEXT_SIZE/2), 
 				text, fadeColor, PICKUP_TEXT_SIZE, PICKUP_TEXT_SIZE, 0, DS_SHADOW | DS_PROPORTIONAL );
 			

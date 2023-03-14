@@ -1559,7 +1559,7 @@ void CG_DrawWeaponSelect( void ) {
 	weaponSelect = abs( cg_drawWeaponSelect.integer );
 
 	// showing weapon select clears pickup item display, but not the blend blob
-	cg.itemPickupTime = 0;
+    //cg.itemPickupTime = 0;
 
 	// count the number of weapons owned
 	bits = cg.snap->ps.stats[ STAT_WEAPONS ];
