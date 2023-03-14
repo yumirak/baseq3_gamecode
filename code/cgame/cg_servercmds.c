@@ -142,8 +142,13 @@ void CG_ParseServerinfo( void ) {
 	Com_sprintf( cgs.mapname, sizeof( cgs.mapname ), "maps/%s.bsp", mapname );
 	Q_strncpyz( cgs.redTeam, Info_ValueForKey( info, "g_redTeam" ), sizeof(cgs.redTeam) );
 	Q_strncpyz( cgs.blueTeam, Info_ValueForKey( info, "g_blueTeam" ), sizeof(cgs.blueTeam) );
+    // rat : cpm
+    cgs.movement = atoi( Info_ValueForKey( info, "g_movement" ) );
+    if ((cgs.movement >= MOVEMENT_NUM_MOVEMENTS) || (cgs.movement < MOVEMENT_VQ3)) {
+        cgs.movement = MOVEMENT_VQ3;
+    }
+    // rat : cpm end
 }
-
 
 void CG_ParseSysteminfo( void ) {
 	const char	*info;

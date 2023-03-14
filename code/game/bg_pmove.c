@@ -20,7 +20,19 @@ float	pm_accelerate = 10.0f;
 float	pm_airaccelerate = 1.0f;
 float	pm_wateraccelerate = 4.0f;
 float	pm_flyaccelerate = 8.0f;
+// rat : movement
+const float	pm_rat_accelerate = 14.0f;
+const float	pm_rat_airaccelerate = 2.4f;
+const float	pm_rat_airstrafeaccelerate = 40.0f;
+const float	pm_rat_airstrafewishspeed = 42.0f;
 
+const float	pm_cpm_accelerate = 15.0f;
+const float	pm_cpm_airaccelerate = 1.0f;
+const float	pm_cpm_airstopaccelerate = 2.5f;
+const float	pm_cpm_airstrafeaccelerate = 70.0f;
+const float	pm_cpm_airstrafewishspeed = 30.0f;
+const float	pm_cpm_aircontrol = 150.0f;
+//
 float	pm_friction = 6.0f;
 float	pm_waterfriction = 1.0f;
 float	pm_flightfriction = 3.0f;
@@ -577,6 +589,128 @@ static void PM_FlyMove( void ) {
 	PM_StepSlideMove( qfalse );
 }
 
+static float PM_GetAccelerate(pmove_t *pm) {
+    switch (pm->pmove_movement) {
+    case MOVEMENT_CPM_CPMA:
+    case MOVEMENT_CPM_DEFRAG:
+        return pm_cpm_accelerate;
+    case MOVEMENT_RM:
+        return pm_rat_accelerate;
+    default:
+        return pm_accelerate;
+    }
+}
+
+static float PM_GetAirAccelerate(pmove_t *pm) {
+    switch (pm->pmove_movement) {
+    case MOVEMENT_CPM_CPMA:
+    case MOVEMENT_CPM_DEFRAG:
+        return pm_cpm_airaccelerate;
+    case MOVEMENT_RM:
+        return pm_rat_airaccelerate;
+    default:
+        return pm_airaccelerate;
+    }
+}
+
+static float PM_GetAirStrafeAccelerate(pmove_t *pm) {
+    switch (pm->pmove_movement) {
+    case MOVEMENT_CPM_CPMA:
+    case MOVEMENT_CPM_DEFRAG:
+        return pm_cpm_airstrafeaccelerate;
+    case MOVEMENT_RM:
+        return pm_rat_airstrafeaccelerate;
+    default:
+        return pm_airaccelerate;
+    }
+}
+
+static float PM_GetAirStopAccelerate(pmove_t *pm) {
+    switch (pm->pmove_movement) {
+    case MOVEMENT_CPM_CPMA:
+    case MOVEMENT_CPM_DEFRAG:
+        return pm_cpm_airstopaccelerate;
+    default:
+        return 0.0f;
+    }
+}
+
+static float PM_GetAirStrafeWishspeed(pmove_t *pm) {
+    switch (pm->pmove_movement) {
+    // case MOVEMENT_CPM:
+    // 	return pm_cpm_airstrafewishspeed;
+    case MOVEMENT_RM:
+        return pm_rat_airstrafewishspeed;
+    default:
+        return pm_cpm_airstrafewishspeed;
+    }
+}
+
+
+///*
+//==================
+//PM_IsMoveInDirection
+//
+//Copied with edits from cl_input.c from Xonotic's Darkplaces engine, which is
+//covered under the GPLv2+ license.
+//==================
+//*/
+//static vec_t PM_IsMoveInDirection(vec_t forward, vec_t side, vec_t angle)
+//{
+//	if(forward == 0 && side == 0)
+//		return 0; // avoid division by zero
+//	angle -= RAD2DEG(atan2(side, forward));
+//	angle = (AngleMod(angle + 180) - 180) / 45;
+//	if(angle >  1)
+//		return 0;
+//	if(angle < -1)
+//		return 0;
+//	return 1 - fabs(angle);
+//}
+
+/*
+==================
+CL_ClientMovement_Physics_CPM_PM_Aircontrol
+
+Copied with edits from cl_input.c from Xonotic's Darkplaces engine, which is
+covered under the GPLv2+ license.
+==================
+*/
+static void PM_CPM_Aircontrol(pmove_t *pm, vec3_t wishdir, vec_t wishspeed)
+{
+    vec_t zspeed, speed, dot, k;
+
+#if 1
+    // this doesn't play well with analog input
+    if(pm->cmd.forwardmove == 0 || pm->cmd.rightmove != 0)
+        return;
+    k = 32;
+#else
+    k = 32 * (2 * PM_IsMoveInDirection(pm->cmd.forwardmove, pm->cmd.rightmove, 0) - 1);
+    if(k <= 0)
+        return;
+#endif
+
+    k *= Com_Clamp(0, 1, wishspeed / PM_GetAirStrafeWishspeed(pm));
+
+    zspeed = pm->ps->velocity[2];
+    pm->ps->velocity[2] = 0;
+    speed = VectorNormalize(pm->ps->velocity);
+
+    dot = DotProduct(pm->ps->velocity, wishdir);
+
+    if(dot > 0) { // we can't change direction while slowing down
+        k *= dot*dot*pml.frametime;
+        k *= pm_cpm_aircontrol;
+        VectorMA(vec3_origin, speed, pm->ps->velocity, pm->ps->velocity);
+        VectorMA(pm->ps->velocity, k, wishdir, pm->ps->velocity);
+        VectorNormalize(pm->ps->velocity);
+    }
+
+    VectorScale(pm->ps->velocity, speed, pm->ps->velocity);
+    pm->ps->velocity[2] = zspeed;
+}
+
 
 /*
 ===================
@@ -584,6 +718,118 @@ PM_AirMove
 
 ===================
 */
+static void PM_AirMove( void ) {
+    int			i;
+    vec3_t		wishvel;
+    float		fmove, smove;
+    vec3_t		wishdir;
+    float		wishspeed, wishspeed2;
+    float		scale;
+    usercmd_t	cmd;
+    float		accel = PM_GetAirAccelerate(pm);
+    vec3_t		curdir;
+    float		dot;
+    /*
+    if (!pml.walking) {
+        pm->ps->stats[STAT_EXTFLAGS] &= ~EXTFL_SLIDING;
+        pm->ps->stats[STAT_SLIDETIMEOUT] = 0;
+    }
+    */
+    PM_Friction();
+
+    fmove = pm->cmd.forwardmove;
+    smove = pm->cmd.rightmove;
+
+    cmd = pm->cmd;
+    scale = PM_CmdScale( &cmd );
+
+    // set the movementDir so clients can rotate the legs for strafing
+    PM_SetMovementDir();
+
+    // project moves down to flat plane
+    pml.forward[2] = 0;
+    pml.right[2] = 0;
+    VectorNormalize (pml.forward);
+    VectorNormalize (pml.right);
+
+    for ( i = 0 ; i < 2 ; i++ ) {
+        wishvel[i] = pml.forward[i]*fmove + pml.right[i]*smove;
+    }
+    wishvel[2] = 0;
+
+    VectorCopy (wishvel, wishdir);
+    wishspeed = VectorNormalize(wishdir);
+    wishspeed *= scale;
+    wishspeed2 = wishspeed;
+
+    // begin Xonotic Darkplaces Air Control
+    switch (pm->pmove_movement) {
+    case MOVEMENT_CPM_DEFRAG:
+    case MOVEMENT_CPM_CPMA:
+    // case MOVEMENT_RM:
+        curdir[0] = pm->ps->velocity[0];
+        curdir[1] = pm->ps->velocity[1];
+        curdir[2] = 0;
+        VectorNormalize(curdir);
+        if (PM_GetAirStopAccelerate(pm)) {
+            dot = -DotProduct(curdir, wishdir);
+            accel = accel + (PM_GetAirStopAccelerate(pm) - accel) * (dot > 0 ? dot : 0);
+        }
+        break;
+    default: // shut up the compiler
+        break;
+    }
+    // end Xonotic Darkplaces Air Control
+
+    if (pm->pmove_movement) {
+        if (fmove == 0 && smove != 0) {
+            wishspeed = PM_GetAirStrafeWishspeed(pm);
+            accel = PM_GetAirStrafeAccelerate(pm);
+        }
+    }
+
+    // not on ground, so little effect on velocity
+    PM_Accelerate (wishdir, wishspeed, accel);
+
+    // begin Xonotic Darkplaces Air Control
+    switch (pm->pmove_movement) {
+    case MOVEMENT_CPM_CPMA:
+    case MOVEMENT_CPM_DEFRAG:
+    // case MOVEMENT_RM:
+        PM_CPM_Aircontrol(pm, wishdir, wishspeed2);
+        break;
+    default:
+        break;
+    }
+    // end Xonotic Darkplaces Air Control
+
+    // we may have a ground plane that is very steep, even
+    // though we don't have a groundentity
+    // slide along the steep plane
+    if ( pml.groundPlane ) {
+        PM_ClipVelocity (pm->ps->velocity, pml.groundTrace.plane.normal,
+            pm->ps->velocity, OVERCLIP );
+    }
+
+#if 0
+    //ZOID:  If we are on the grapple, try stair-stepping
+    //this allows a player to use the grapple to pull himself
+    //over a ledge
+    if (pm->ps->pm_flags & PMF_GRAPPLE_PULL)
+        PM_StepSlideMove ( qtrue );
+    else
+        PM_SlideMove ( qtrue );
+#endif
+
+    PM_StepSlideMove ( qtrue );
+}
+
+/*
+===================
+PM_AirMove
+
+===================
+
 static void PM_AirMove( void ) {
 	int			i;
 	vec3_t		wishvel;
@@ -643,7 +889,7 @@ static void PM_AirMove( void ) {
 	PM_StepSlideMove ( qtrue );
 }
 
-/*
+
 ===================
 PM_GrappleMove
 
@@ -744,22 +990,44 @@ static void PM_WalkMove( void ) {
 
 	// clamp the speed lower if wading or walking on the bottom
 	if ( pm->waterlevel ) {
-		float	waterScale;
 
+		float	waterScale;
+        /*
+        if ((pm->pmove_movement != MOVEMENT_RM) || pm->waterlevel != 1) {
+            waterScale = pm->waterlevel / 3.0;
+            waterScale = 1.0 - ( 1.0 - PM_GetSwimscale(pm) ) * waterScale;
+            if ( wishspeed > pm->ps->speed * waterScale ) {
+                wishspeed = pm->ps->speed * waterScale;
+            }
+        }
+        */
 		waterScale = pm->waterlevel / 3.0;
 		waterScale = 1.0 - ( 1.0 - pm_swimScale ) * waterScale;
 		if ( wishspeed > pm->ps->speed * waterScale ) {
 			wishspeed = pm->ps->speed * waterScale;
-		}
+        }
 	}
 
-	// when a player gets hit, they temporarily lose
+    // when a player gets hit, they temporarily lose
 	// full control, which allows them to be moved a bit
+    if ( ( pml.groundTrace.surfaceFlags & SURF_SLICK ) || pm->ps->pm_flags & PMF_TIME_KNOCKBACK ) {
+        // Slick and ground boost (probably).
+        switch (pm->pmove_movement) {
+        case MOVEMENT_CPM_DEFRAG:
+            accelerate = PM_GetAccelerate(pm);
+            break;
+        default:
+            accelerate = PM_GetAirAccelerate(pm);
+        }
+    } else {
+        accelerate = PM_GetAccelerate(pm);
+    }
+    /*
 	if ( ( pml.groundTrace.surfaceFlags & SURF_SLICK ) || pm->ps->pm_flags & PMF_TIME_KNOCKBACK ) {
 		accelerate = pm_airaccelerate;
 	} else {
 		accelerate = pm_accelerate;
-	}
+    }*/
 
 	PM_Accelerate (wishdir, wishspeed, accelerate);
 

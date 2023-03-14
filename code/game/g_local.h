@@ -810,7 +810,10 @@ extern	vmCvar_t	g_enableDust;
 extern	vmCvar_t	g_enableBreath;
 extern	vmCvar_t	g_singlePlayer;
 extern	vmCvar_t	g_proxMineTimeout;
-extern  vmCvar_t    g_damagePlums; //rat damageplum
+extern  vmCvar_t    g_damagePlums; // rat damageplum
+extern  vmCvar_t    g_movement; // rat : cpm
+extern  vmCvar_t	g_vampire; // OA : vampire
+extern  vmCvar_t	g_vampireMaxHealth;
 void	trap_Print( const char *text );
 void	trap_Error( const char *text );
 int		trap_Milliseconds( void );

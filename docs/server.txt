@@ -3,6 +3,19 @@
 ****************************************************
 
 ========================
+g_vampire <value> // default 0 - recommended 0.6666
+
+    enables lifesteal-like damage
+    note that self-damage and armor can't be lifestealed
+========================
+g_movement <number> // default 0
+
+    0 - MOVEMENT_VQ3
+    1 - MOVEMENT_CPM_DEFRAG
+    2 - MOVEMENT_RM
+    3 - MOVEMENT_CPM_CPMA
+
+========================
 g_gametype <number>
     
     0 - Free For All

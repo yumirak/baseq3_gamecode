@@ -65,6 +65,9 @@ vmCvar_t	pmove_fixed;
 vmCvar_t	pmove_msec;
 vmCvar_t	g_listEntity;
 vmCvar_t    g_damagePlums; // rat damageplums
+vmCvar_t    g_movement; // rat : cpm
+vmCvar_t	g_vampire; // OA : vampire
+vmCvar_t	g_vampireMaxHealth;
 #ifdef MISSIONPACK
 vmCvar_t	g_obeliskHealth;
 vmCvar_t	g_obeliskRegenPeriod;
@@ -125,7 +128,7 @@ static cvarTable_t gameCvarTable[] = {
 
 	{ &g_speed, "g_speed", "320", 0, 0, qtrue  },
 	{ &g_gravity, "g_gravity", "800", 0, 0, qtrue  },
-    { &g_damagePlums, "g_damagePlums", "1", CVAR_ARCHIVE, 0, qfalse }, // rat damageplum
+
 	{ &g_knockback, "g_knockback", "1000", 0, 0, qtrue  },
 	{ &g_quadfactor, "g_quadfactor", "3", 0, 0, qtrue  },
 	{ &g_weaponRespawn, "g_weaponrespawn", "5", 0, 0, qtrue  },
@@ -147,6 +150,10 @@ static cvarTable_t gameCvarTable[] = {
 	{ &g_unlagged, "g_unlagged", "1", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qfalse },
 	{ &g_predictPVS, "g_predictPVS", "0", CVAR_ARCHIVE, 0, qfalse },
 
+    { &g_damagePlums, "g_damagePlums", "1", CVAR_ARCHIVE, 0, qfalse }, // rat damageplum
+    { &g_movement,   "g_movement", "0", CVAR_ARCHIVE | CVAR_SERVERINFO, 0, qtrue },
+    { &g_vampire, "g_vampire", "0.0", CVAR_NORESTART, 0, qtrue },
+    { &g_vampireMaxHealth, "g_vampire_max_health", "500", CVAR_NORESTART, 0, qtrue },
 #ifdef MISSIONPACK
 	{ &g_obeliskHealth, "g_obeliskHealth", "2500", 0, 0, qfalse },
 	{ &g_obeliskRegenPeriod, "g_obeliskRegenPeriod", "1", 0, 0, qfalse },
@@ -525,7 +532,10 @@ static void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	G_ProcessIPBans();
 
 	G_InitMemory();
-
+    if( g_gametype.integer == GT_SINGLE_PLAYER )
+    {
+        g_vampire.value = 0.0f;
+    }
 	// set some level globals
 	memset( &level, 0, sizeof( level ) );
 	level.time = levelTime;

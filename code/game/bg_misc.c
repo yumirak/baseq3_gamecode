@@ -1600,7 +1600,32 @@ void BG_PlayerStateToEntityStateExtraPolate( playerState_t *ps, entityState_t *s
 	s->loopSound = ps->loopSound;
 	s->generic1 = ps->generic1;
 }
+char *BG_MovementToString( movement_t movement )
+{
+    switch (movement) {
+    case MOVEMENT_CPM_CPMA:
+        return "CPMA";
+    case MOVEMENT_CPM_DEFRAG:
+        return "CPMD";
+    case MOVEMENT_RM:
+        return "RM";
+    default:
+        return "VQ3";
+    }
+}
 
+movement_t BG_MovementFromString( const char *s )
+{
+    if (Q_stricmp(BG_MovementToString(MOVEMENT_CPM_CPMA), s) == 0) {
+        return MOVEMENT_CPM_CPMA;
+    }else if (Q_stricmp(BG_MovementToString(MOVEMENT_CPM_DEFRAG), s) == 0) {
+        return MOVEMENT_CPM_DEFRAG;
+    } else if (Q_stricmp(BG_MovementToString(MOVEMENT_RM), s) == 0) {
+        return MOVEMENT_RM;
+    } else {
+        return MOVEMENT_VQ3;
+    }
+}
 
 int replace_s( char * str1, char * str2, char * src, int max_len ) 
 {
