@@ -839,6 +839,9 @@ void G_RankPickupArmor( int self, int quantity )
 	case 5:
 		trap_RankReportInt( self, -1, QGR_KEY_ARMOR_SHARD, 1, 1 );
 		break;
+    case 25:
+        trap_RankReportInt( self, -1, QGR_KEY_ARMOR_GREEN, 1, 1 );
+        break;
 	case 50:
 		trap_RankReportInt( self, -1, QGR_KEY_ARMOR_YELLOW, 1, 1 );
 		break;
