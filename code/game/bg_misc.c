@@ -1,6 +1,8 @@
 // Copyright (C) 1999-2000 Id Software, Inc.
 //
 // bg_misc.c -- both games misc functions, all completely stateless
+// NOTE : IF YOU WANT ADD NEW ITEMS AT "bg_itemlist"
+// ITS BETTER DO IT TO BOTTOM SINCE ITS BREAKS OLDER DEMO
 
 #include "q_shared.h"
 #include "bg_public.h"
@@ -58,21 +60,6 @@ gitem_t	bg_itemlist[] =
 /* precache */ "",
 /* sounds */ ""
 	},
-/*QUAKED item_armor_jacket (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
-*/
-   {
-        "item_armor_jacket",
-        "sound/misc/ar2_pkup.wav",
-        { "models/powerups/armor/armor_gre.md3",
-        0, 0, 0},
-/* icon */		"icons/iconr_green",
-/* pickup */	"Light Armor",
-        25,
-        IT_ARMOR,
-        0,
-/* precache */ "",
-/* sounds */ ""
-    },
 /*QUAKED item_armor_combat (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
 */
 	{
@@ -909,9 +896,23 @@ Only in One Flag CTF games
 /* sounds */ "sound/weapons/vulcan/wvulwind.wav"
 	},
 #endif
-
-	// end of list marker
-	{NULL}
+/*QUAKED item_armor_jacket (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
+*/
+   {
+        "item_armor_jacket",
+        "sound/misc/ar2_pkup.wav",
+       { "models/powerups/armor/armor_gre.md3",
+        0, 0, 0},
+/* icon */		"icons/iconr_green",
+/* pickup */	"Light Armor",
+        25,
+        IT_ARMOR,
+        0,
+/* precache */ "",
+/* sounds */ ""
+    },
+// end of list marker
+{NULL}
 };
 
 int		bg_numItems = ARRAY_LEN( bg_itemlist ) - 1;
