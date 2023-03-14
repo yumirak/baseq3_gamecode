@@ -1065,7 +1065,7 @@ typedef struct {
 	int				maxclients;
 	char			mapname[MAX_QPATH];
 	char			redTeam[MAX_QPATH];
-	char			blueTeam[MAX_QPATH];
+    char			blueTeam[MAX_QPATH];
 
 	int				voteTime;
 	int				voteYes;
@@ -1145,6 +1145,7 @@ typedef struct {
 
 	float			cursorX;
 	float			cursorY;
+    movement_t	movement;
 } cgs_t;
 
 //==============================================================================

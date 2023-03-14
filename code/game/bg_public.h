@@ -148,6 +148,16 @@ typedef enum {
 #define	PMF_ALL_TIMES	(PMF_TIME_WATERJUMP|PMF_TIME_LAND|PMF_TIME_KNOCKBACK)
 
 #define	MAXTOUCH	32
+
+typedef enum {
+    MOVEMENT_VQ3 = 0,
+    MOVEMENT_CPM_DEFRAG,
+    MOVEMENT_RM,
+    MOVEMENT_CPM_CPMA,
+
+    MOVEMENT_NUM_MOVEMENTS,
+} movement_t;
+
 typedef struct {
 	// state (in / out)
 	playerState_t	*ps;
@@ -174,6 +184,9 @@ typedef struct {
 	// for fixed msec Pmove
 	int			pmove_fixed;
 	int			pmove_msec;
+
+        // Selects between VQ3, CPM, and RM.
+        movement_t              pmove_movement;
 
 	// callbacks to test the world
 	// these will be different functions during game and cgame

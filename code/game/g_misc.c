@@ -90,7 +90,18 @@ void TeleportPlayer( gentity_t *player, vec3_t origin, vec3_t angles ) {
 
 	// toggle the teleport bit so the client knows to not lerp
 	player->client->ps.eFlags ^= EF_TELEPORT_BIT;
-
+    /*
+    switch (g_movement.integer) {
+    case MOVEMENT_CPM_CPMA:
+    case MOVEMENT_CPM_DEFRAG:
+        break;
+    default:
+        // reset rampjump
+        //player->client->ps.stats[STAT_JUMPTIME] = 0;
+    }
+    */
+    if( g_movement.integer == MOVEMENT_CPM_DEFRAG)
+            return;
 	// set angles
 	if ( angles )
 		SetClientViewAngle( player, angles );
@@ -112,6 +123,7 @@ void TeleportPlayer( gentity_t *player, vec3_t origin, vec3_t angles ) {
 	if ( player->client->sess.sessionTeam != TEAM_SPECTATOR ) {
 		trap_LinkEntity( player );
 	}
+
 }
 
 
