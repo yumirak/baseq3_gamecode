@@ -1,6 +1,20 @@
 ****************************************************
 *********** client variables and commands **********
 ****************************************************
+========================
+cg_bobGun <0|1>
+
+    0 - gun model stay in place
+    1 - gun model sway according movement (default)
+
+========================
+cg_drawGun <0|1|2>
+
+    0 - disabled
+    1 - draw gun model (default)
+    2 - draw translucent gun model
+
+    note that cg_drawGun 2 also make other player translucent too
 
 ========================
 cg_damageplums <0|1|2>
@@ -10,8 +24,8 @@ cg_damageplums <0|1|2>
     2 - enable except MG and LG
 
     print a plum-size damage a client dealt to enemy
-
-cg_damageplumSize <pixelsize>
+========================
+cg_damageplumSize <pixelsize> default 8
 
    set how big plums size
 
