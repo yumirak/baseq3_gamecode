@@ -1,25 +1,40 @@
 # CUSTOM QUAKE3ARENA GAMECODE
 
 # things done so far
-      * Quakelive-like damage plums ( g_damageplums )
-      * Upscale font
-      * Weaponbar adjustment
-
+ * Quake Live-like Damage Plums ( g_damageplums )
+ * Upscale Font
+ * Weaponbar Adjustment
+ * Green Armor
+ * Vampiric Damage ( g_vampire )
+ * CPM Movement ( + Rat Mode )
+ * Pick-Up Timer
+ 
 # TODO
-      * Vampiric Damage ( g_vampire )
-      * Clan Arena
-      * Green Armor and QL HMG
+ * Clan Arena
+ * QL HMG
 
 # NOT TODO
-      * Implement Quake 3 Team Arena Features
+ * Implement Quake 3 Team Arena Features
 
 #  CREDITS:
-      * OpenArena ( https://github.com/OpenArena/gamecode )
-      * Ratmod ( https://github.com/rdntcntrl/ratoa_gamecode )
-        - Damage Plum
-      * Aftershock ( https://github.com/zturtleman/oaunofficial )
-        - Damage Plum Font
-
+ * OpenArena ( https://github.com/OpenArena/gamecode )
+ * Ratmod ( https://github.com/rdntcntrl/ratoa_gamecode )
+ 
+       - Damage Plum
+       - CPM Movement ( https://github.com/oitzujoey )
+       
+ * Aftershock ( https://github.com/zturtleman/oaunofficial )
+ 
+       - Damage Plum Font
+       
+ * https://github.com/Kr3m/baseq3a
+ 
+       - Linux QVM Makefiles
+       
+ * https://github.com/Riccardoman/baseq3-v1.32d
+ 
+       - Green Armor Code
+       
 ---------------------------------------------
 # ORIGINAL README
 ---------------------------------------------
