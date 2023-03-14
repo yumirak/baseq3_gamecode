@@ -1617,7 +1617,7 @@ static void CG_DrawReward( void ) {
 		return;
 	}
 
-	color = CG_FadeColor( cg.rewardTime, REWARD_TIME );
+    color = CG_FadeColor( cg.rewardTime, REWARD_TIME );
 	if ( !color ) {
 		if (cg.rewardStack > 0) {
 			for(i = 0; i < cg.rewardStack; i++) {
@@ -1627,14 +1627,14 @@ static void CG_DrawReward( void ) {
 			}
 			cg.rewardTime = cg.time;
 			cg.rewardStack--;
-			color = CG_FadeColor( cg.rewardTime, REWARD_TIME );
+            color = CG_FadeColor( cg.rewardTime, REWARD_TIME );
 			trap_S_StartLocalSound(cg.rewardSound[0], CHAN_ANNOUNCER);
 		} else {
 			return;
 		}
 	}
 
-	trap_R_SetColor( color );
+    trap_R_SetColor( color );
 
 	/*
 	count = cg.rewardCount[0]/10;				// number of big rewards to draw
@@ -1651,10 +1651,10 @@ static void CG_DrawReward( void ) {
 	count = cg.rewardCount[0] - count*10;		// number of small rewards to draw
 	*/
 
-	if ( cg.rewardCount[0] >= 10 ) {
+    if ( cg.rewardCount[0] >= 1 ) {
 		y = 56; // FIXME: cgs.screenYmin + 56?
-		x = 320 - ICON_SIZE/2;
-		CG_DrawPic( x, y, ICON_SIZE-4, ICON_SIZE-4, cg.rewardShader[0] );
+        x = 320 - ICON_SIZE/2;
+        CG_DrawPic( x, y, ICON_SIZE-4, ICON_SIZE-4, cg.rewardShader[0] );
 		Com_sprintf( buf, sizeof( buf ), "%d", cg.rewardCount[0] );
         CG_DrawString( 320, y + ICON_SIZE, buf, color, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0, DS_SHADOW | DS_CENTER );
 	}
@@ -1663,13 +1663,13 @@ static void CG_DrawReward( void ) {
 		count = cg.rewardCount[0];
 
 		y = 56; // FIXME: cgs.screenYmin + 56?
-		x = 320 - count * ICON_SIZE/2;
+        x = 320 - count * ICON_SIZE/2;
 		for ( i = 0 ; i < count ; i++ ) {
-			CG_DrawPic( x, y, ICON_SIZE-4, ICON_SIZE-4, cg.rewardShader[0] );
-			x += ICON_SIZE;
-		}
-	}
-	trap_R_SetColor( NULL );
+            CG_DrawPic( x, y, ICON_SIZE-4, ICON_SIZE-4, cg.rewardShader[0] );
+            x += ICON_SIZE;
+        }
+    }
+    trap_R_SetColor( NULL );
 }
 
 
