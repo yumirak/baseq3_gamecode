@@ -937,20 +937,11 @@ typedef struct {
 	sfxHandle_t deniedSound;
 	sfxHandle_t humiliationSound;
 	sfxHandle_t assistSound;
-	sfxHandle_t defendSound;
-#ifdef MISSIONPACK
-	sfxHandle_t firstImpressiveSound;
-	sfxHandle_t firstExcellentSound;
-	sfxHandle_t firstHumiliationSound;
-#endif
+
 	sfxHandle_t takenLeadSound;
 	sfxHandle_t tiedLeadSound;
 	sfxHandle_t lostLeadSound;
-#ifdef MISSIONPACK
-	sfxHandle_t voteNow;
-	sfxHandle_t votePassed;
-	sfxHandle_t voteFailed;
-#endif
+
 	sfxHandle_t watrInSound;
 	sfxHandle_t watrOutSound;
 	sfxHandle_t watrUnSound;
@@ -1008,7 +999,7 @@ typedef struct {
 	qhandle_t retrieveShader;
 	qhandle_t escortShader;
 	qhandle_t flagShaders[3];
-	sfxHandle_t	countPrepareTeamSound;
+
 
 	sfxHandle_t ammoregenSound;
 	sfxHandle_t doublerSound;
@@ -1027,6 +1018,15 @@ typedef struct {
 	sfxHandle_t	wstbimpdSound;
 	sfxHandle_t	wstbactvSound;
 
+    sfxHandle_t firstImpressiveSound;
+    sfxHandle_t firstExcellentSound;
+    sfxHandle_t firstHumiliationSound;
+
+    sfxHandle_t	countPrepareTeamSound;
+    sfxHandle_t	defendSound;
+    sfxHandle_t voteNow;
+    sfxHandle_t votePassed;
+    sfxHandle_t voteFailed;
 } cgMedia_t;
 
 

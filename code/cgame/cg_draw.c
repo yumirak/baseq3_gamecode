@@ -830,7 +830,7 @@ static float CG_DrawSpeedMeter( float y ) {
 		return y + BIGCHAR_HEIGHT + 4;
 	} else {
 		/* center of screen */
-		CG_DrawString( 320, 300, s, colorWhite, BIGCHAR_WIDTH, BIGCHAR_HEIGHT, 0, DS_SHADOW | DS_CENTER | DS_PROPORTIONAL );
+        CG_DrawString( 320, 300, s, colorWhite, BIGCHAR_WIDTH / 2 , BIGCHAR_HEIGHT / 2 , 0, DS_SHADOW | DS_CENTER  );
 		return y;
 	}
 }
@@ -1617,7 +1617,7 @@ static void CG_DrawReward( void ) {
 		return;
 	}
 
-    color = CG_FadeColor( cg.rewardTime, REWARD_TIME );
+    color = CG_FadeColorTime( cg.rewardTime, REWARD_TIME , 150);
 	if ( !color ) {
 		if (cg.rewardStack > 0) {
 			for(i = 0; i < cg.rewardStack; i++) {
@@ -1627,8 +1627,8 @@ static void CG_DrawReward( void ) {
 			}
 			cg.rewardTime = cg.time;
 			cg.rewardStack--;
-            color = CG_FadeColor( cg.rewardTime, REWARD_TIME );
-			trap_S_StartLocalSound(cg.rewardSound[0], CHAN_ANNOUNCER);
+            color = CG_FadeColorTime( cg.rewardTime, REWARD_TIME, 150 );
+            trap_S_StartLocalSound(cg.rewardSound[0], CHAN_ANNOUNCER);
 		} else {
 			return;
 		}
@@ -1651,20 +1651,20 @@ static void CG_DrawReward( void ) {
 	count = cg.rewardCount[0] - count*10;		// number of small rewards to draw
 	*/
 
-    if ( cg.rewardCount[0] >= 1 ) {
-		y = 56; // FIXME: cgs.screenYmin + 56?
+    if ( cg.rewardCount[0] >= 2 ) {
+        y = 56; // FIXME: cgs.screenYmin + 56?
         x = 320 - ICON_SIZE/2;
         CG_DrawPic( x, y, ICON_SIZE-4, ICON_SIZE-4, cg.rewardShader[0] );
-		Com_sprintf( buf, sizeof( buf ), "%d", cg.rewardCount[0] );
-        CG_DrawString( 320, y + ICON_SIZE, buf, color, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0, DS_SHADOW | DS_CENTER );
-	}
-	else {
+        Com_sprintf( buf, sizeof( buf ), "%d", cg.rewardCount[0] );
+        CG_DrawString( 320, y + ICON_SIZE, buf, color, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0, DS_SHADOW | DS_CENTER | DS_PROPORTIONAL );
+    }
+    else {
 
-		count = cg.rewardCount[0];
+        count = cg.rewardCount[0];
 
-		y = 56; // FIXME: cgs.screenYmin + 56?
+        y = 56; // FIXME: cgs.screenYmin + 56?
         x = 320 - count * ICON_SIZE/2;
-		for ( i = 0 ; i < count ; i++ ) {
+        for ( i = 0 ; i < count ; i++ ) {
             CG_DrawPic( x, y, ICON_SIZE-4, ICON_SIZE-4, cg.rewardShader[0] );
             x += ICON_SIZE;
         }
@@ -2192,7 +2192,7 @@ static void CG_DrawVote( void ) {
 	CG_DrawString( cgs.screenXmin - 0, 58 + SMALLCHAR_HEIGHT + 2, s, colorWhite, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0, DF_PROPORTIONAL );
 #else
 	s = va( "VOTE(%i):%s yes:%i no:%i", sec, cgs.voteString, cgs.voteYes, cgs.voteNo );
-	CG_DrawString( cgs.screenXmin - 0, 58, s, colorWhite, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0, DS_PROPORTIONAL ); // DS_SHADOW?
+    CG_DrawString( cgs.screenXmin - 0, 58, s, colorWhite, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0, DS_PROPORTIONAL | DS_SHADOW); // DS_SHADOW?
 #endif
 }
 
