@@ -375,18 +375,18 @@ qboolean CG_DrawOldScoreboard( void ) {
 
 	y = SB_TOP;
 
-	// If there are more than SB_MAXCLIENTS_NORMAL, use the interleaved scores
-	if ( cg.numScores > SB_MAXCLIENTS_NORMAL ) {
+    // If there are more than SB_MAXCLIENTS_NORMAL, use the interleaved scores
+    //if ( cg.numScores > SB_MAXCLIENTS_NORMAL ) {
 		maxClients = SB_MAXCLIENTS_INTER;
 		lineHeight = SB_INTER_HEIGHT;
 		topBorderSize = 8;
 		bottomBorderSize = 16;
-	} else {
+    /*} else {
 		maxClients = SB_MAXCLIENTS_NORMAL;
 		lineHeight = SB_NORMAL_HEIGHT;
 		topBorderSize = 16;
 		bottomBorderSize = 16;
-	}
+    }*/
 
 	localClient = qfalse;
 

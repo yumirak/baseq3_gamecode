@@ -52,7 +52,7 @@
 #define	CHAR_HEIGHT			48
 #define	TEXT_ICON_SPACE		4
 
-#define PICKUP_ICON_SIZE	32
+#define PICKUP_ICON_SIZE	24
 #define PICKUP_TEXT_SIZE	12
 
 #define	TEAMCHAT_WIDTH		80
@@ -937,6 +937,7 @@ typedef struct {
 	sfxHandle_t deniedSound;
 	sfxHandle_t humiliationSound;
 	sfxHandle_t assistSound;
+    sfxHandle_t	defendSound;
 
 	sfxHandle_t takenLeadSound;
 	sfxHandle_t tiedLeadSound;
@@ -1023,7 +1024,7 @@ typedef struct {
     sfxHandle_t firstHumiliationSound;
 
     sfxHandle_t	countPrepareTeamSound;
-    sfxHandle_t	defendSound;
+
     sfxHandle_t voteNow;
     sfxHandle_t votePassed;
     sfxHandle_t voteFailed;

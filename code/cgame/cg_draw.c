@@ -1450,12 +1450,7 @@ static int CG_DrawPickupItem( int y ) {
 		if ( fadeColor ) {
 			CG_RegisterItemVisuals( value );
 			trap_R_SetColor( fadeColor );
-
-            //if ( cg.itemPickupCount > 1 ) {
-                text = va( "%s x%i %i:%02i", bg_itemlist[ value ].pickup_name, cg.itemPickupCount ,mins, seconds );
-            //} else {
-                //text = bg_itemlist[ value ].pickup_name;
-            //}
+            text = va( "%i:%02i %s x%i ",mins, seconds , bg_itemlist[ value ].pickup_name, cg.itemPickupCount );
             CG_DrawPic( cgs.screenXmin + 8, y, PICKUP_ICON_SIZE, PICKUP_ICON_SIZE, cg_items[ value ].icon );
 			CG_DrawString( cgs.screenXmin + PICKUP_ICON_SIZE + 16, y + (PICKUP_ICON_SIZE/2 - PICKUP_TEXT_SIZE/2), 
 				text, fadeColor, PICKUP_TEXT_SIZE, PICKUP_TEXT_SIZE, 0, DS_SHADOW | DS_PROPORTIONAL );
