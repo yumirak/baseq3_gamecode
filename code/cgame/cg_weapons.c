@@ -1576,7 +1576,7 @@ void CG_DrawWeaponSelect( void ) {
         dx = 30;
 		dy = 0;
 	} else {
-		x = cgs.screenXmin + 6;
+        x = cgs.screenXmin + 4;
         y = 240 - count * 10;
 		dx = 0;
         dy = 20;
@@ -1605,10 +1605,10 @@ void CG_DrawWeaponSelect( void ) {
 			BG_sprintf( buf, "%i", cg.snap->ps.ammo[ i ] );
 			if ( weaponSelect == 2 ) {
 				// horizontal ammo counters
-                CG_DrawString( x + W_ICON_SIZE/2, y - 15, buf, color, AMMO_FONT_SIZE/1.3, AMMO_FONT_SIZE/1.3, 0, DS_CENTER | DS_PROPORTIONAL );
+                CG_DrawString( x + W_ICON_SIZE/2, y - 15, buf, color, AMMO_FONT_SIZE/1.3, AMMO_FONT_SIZE/1.3, 0,DS_SHADOW | DS_CENTER | DS_PROPORTIONAL );
 			} else {
 				// vectical ammo counters
-                CG_DrawString( x + (W_ICON_SIZE * 1.5) + (3*AMMO_FONT_SIZE), y + (W_ICON_SIZE-AMMO_FONT_SIZE)/2, buf, color, AMMO_FONT_SIZE, AMMO_FONT_SIZE, 0, DS_RIGHT | DS_PROPORTIONAL );
+                CG_DrawString( x + (W_ICON_SIZE * 1.5) + (3*AMMO_FONT_SIZE), y + (W_ICON_SIZE-AMMO_FONT_SIZE)/2, buf, color, AMMO_FONT_SIZE, AMMO_FONT_SIZE, 0,DS_SHADOW | DS_RIGHT | DS_PROPORTIONAL );
 			}
 		}
 
@@ -2180,9 +2180,9 @@ static void CG_ShotgunPattern( vec3_t origin, vec3_t origin2, int seed, int othe
 	CrossProduct( forward, right, up );
 
 	// generate the "random" spread pattern
-	for ( i = 0 ; i < DEFAULT_SHOTGUN_COUNT ; i++ ) {
-		r = Q_crandom( &seed ) * DEFAULT_SHOTGUN_SPREAD * 16;
-		u = Q_crandom( &seed ) * DEFAULT_SHOTGUN_SPREAD * 16;
+    for ( i = 0 ; i < DEFAULT_SHOTGUN_COUNT ; i++ ) {
+        r = Q_crandom( &seed ) * DEFAULT_SHOTGUN_SPREAD * 16;
+        u = Q_crandom( &seed ) * DEFAULT_SHOTGUN_SPREAD * 16;
 		VectorMA( origin, 8192 * 16, forward, end);
 		VectorMA (end, r, right, end);
 		VectorMA (end, u, up, end);

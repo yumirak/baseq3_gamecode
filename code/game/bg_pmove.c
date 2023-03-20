@@ -376,7 +376,19 @@ static qboolean PM_CheckJump( void ) {
 	pm->ps->pm_flags |= PMF_JUMP_HELD;
 
 	pm->ps->groundEntityNum = ENTITYNUM_NONE;
-	pm->ps->velocity[2] = JUMP_VELOCITY;
+    // Ramp boost
+    if (pm->pmove_movement >= MOVEMENT_CPM_DEFRAG && (pm->ps->velocity[2] >= 0)) {
+        pm->ps->velocity[2] += JUMP_VELOCITY  ;
+    }
+    else
+        pm->ps->velocity[2] = JUMP_VELOCITY;
+
+    // Double jump
+    if (pm->pmove_movement>= MOVEMENT_CPM_DEFRAG) {
+        if (pm->ps->stats[STAT_JUMPTIME] > 0)
+            pm->ps->velocity[2] += 100;
+        pm->ps->stats[STAT_JUMPTIME] = 400;
+    }
 	PM_AddEvent( EV_JUMP );
 
 	if ( pm->cmd.forwardmove >= 0 ) {
@@ -2049,6 +2061,13 @@ static void PM_DropTimers( void ) {
 			pm->ps->torsoTimer = 0;
 		}
 	}
+    // drop post-jump counter
+    if ( pm->ps->stats[STAT_JUMPTIME] > 0 ) {
+        pm->ps->stats[STAT_JUMPTIME] -= pml.msec;
+        if ( pm->ps->stats[STAT_JUMPTIME] < 0 ) {
+            pm->ps->stats[STAT_JUMPTIME] = 0;
+        }
+    }
 }
 
 /*

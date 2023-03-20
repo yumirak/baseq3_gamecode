@@ -341,7 +341,7 @@ qboolean CG_DrawOldScoreboard( void ) {
 	// fragged by ... line
 	if ( cg.killerName[0] ) {
 		s = va( "Fragged by %s", cg.killerName );
-		CG_DrawString( 320, 40, s, fadeColor, BIGCHAR_WIDTH, BIGCHAR_HEIGHT, 0, DS_SHADOW | DS_CENTER | DS_PROPORTIONAL );
+        CG_DrawString( 320, 40, s, fadeColor, BIGCHAR_WIDTH, BIGCHAR_HEIGHT, 0, DS_SHADOW | DS_CENTER | DS_PROPORTIONAL );
 	}
 
 	// current rank
@@ -351,7 +351,7 @@ qboolean CG_DrawOldScoreboard( void ) {
 				CG_PlaceString( cg.snap->ps.persistant[PERS_RANK] + 1 ),
 				cg.snap->ps.persistant[PERS_SCORE] );
 
-			CG_DrawString( 320, 60, s, fadeColor, BIGCHAR_WIDTH, BIGCHAR_HEIGHT, 0, DS_SHADOW | DS_CENTER | DS_PROPORTIONAL );
+            CG_DrawString( 320, 60, s, fadeColor, BIGCHAR_WIDTH, BIGCHAR_HEIGHT, 0, DS_SHADOW | DS_CENTER | DS_PROPORTIONAL );
 		}
 	} else {
 		if ( cg.teamScores[0] == cg.teamScores[1] ) {
@@ -362,7 +362,7 @@ qboolean CG_DrawOldScoreboard( void ) {
 			s = va("Blue leads %i to %i",cg.teamScores[1], cg.teamScores[0] );
 		}
 
-		CG_DrawString( 320, 60, s, fadeColor, BIGCHAR_WIDTH, BIGCHAR_HEIGHT, 0, DS_SHADOW | DS_CENTER | DS_PROPORTIONAL );
+        CG_DrawString( 320, 60, s, fadeColor, BIGCHAR_WIDTH, BIGCHAR_HEIGHT, 0, DS_SHADOW | DS_CENTER | DS_PROPORTIONAL );
 	}
 
 	// scoreboard
@@ -390,53 +390,53 @@ qboolean CG_DrawOldScoreboard( void ) {
 
 	localClient = qfalse;
 
-	if ( cgs.gametype >= GT_TEAM ) {
-		//
-		// teamplay scoreboard
-		//
-		y += lineHeight/2;
+    if ( cgs.gametype >= GT_TEAM ) {
+        //
+        // teamplay scoreboard
+        //
+        y += lineHeight/2;
 
-		if ( cg.teamScores[0] >= cg.teamScores[1] ) {
-			n1 = CG_TeamScoreboard( y, TEAM_RED, fade, maxClients, lineHeight );
-			CG_DrawTeamBackground( 0, y - topBorderSize, 640, n1 * lineHeight + bottomBorderSize, 0.33f, TEAM_RED );
-			y += (n1 * lineHeight) + BIGCHAR_HEIGHT;
-			maxClients -= n1;
-			n2 = CG_TeamScoreboard( y, TEAM_BLUE, fade, maxClients, lineHeight );
-			CG_DrawTeamBackground( 0, y - topBorderSize, 640, n2 * lineHeight + bottomBorderSize, 0.33f, TEAM_BLUE );
-			y += (n2 * lineHeight) + BIGCHAR_HEIGHT;
-			maxClients -= n2;
-		} else {
-			n1 = CG_TeamScoreboard( y, TEAM_BLUE, fade, maxClients, lineHeight );
-			CG_DrawTeamBackground( 0, y - topBorderSize, 640, n1 * lineHeight + bottomBorderSize, 0.33f, TEAM_BLUE );
-			y += (n1 * lineHeight) + BIGCHAR_HEIGHT;
-			maxClients -= n1;
-			n2 = CG_TeamScoreboard( y, TEAM_RED, fade, maxClients, lineHeight );
-			CG_DrawTeamBackground( 0, y - topBorderSize, 640, n2 * lineHeight + bottomBorderSize, 0.33f, TEAM_RED );
-			y += (n2 * lineHeight) + BIGCHAR_HEIGHT;
-			maxClients -= n2;
-		}
-		n1 = CG_TeamScoreboard( y, TEAM_SPECTATOR, fade, maxClients, lineHeight );
-		y += (n1 * lineHeight) + BIGCHAR_HEIGHT;
+        if ( cg.teamScores[0] >= cg.teamScores[1] ) {
+            n1 = CG_TeamScoreboard( y, TEAM_RED, fade, maxClients, lineHeight );
+            CG_DrawTeamBackground( 0, y - topBorderSize, 640, n1 * lineHeight + bottomBorderSize, 0.33f, TEAM_RED );
+            y += (n1 * lineHeight) + BIGCHAR_HEIGHT;
+            maxClients -= n1;
+            n2 = CG_TeamScoreboard( y, TEAM_BLUE, fade, maxClients, lineHeight );
+            CG_DrawTeamBackground( 0, y - topBorderSize, 640, n2 * lineHeight + bottomBorderSize, 0.33f, TEAM_BLUE );
+            y += (n2 * lineHeight) + BIGCHAR_HEIGHT;
+            maxClients -= n2;
+        } else {
+            n1 = CG_TeamScoreboard( y, TEAM_BLUE, fade, maxClients, lineHeight );
+            CG_DrawTeamBackground( 0, y - topBorderSize, 640, n1 * lineHeight + bottomBorderSize, 0.33f, TEAM_BLUE );
+            y += (n1 * lineHeight) + BIGCHAR_HEIGHT;
+            maxClients -= n1;
+            n2 = CG_TeamScoreboard( y, TEAM_RED, fade, maxClients, lineHeight );
+            CG_DrawTeamBackground( 0, y - topBorderSize, 640, n2 * lineHeight + bottomBorderSize, 0.33f, TEAM_RED );
+            y += (n2 * lineHeight) + BIGCHAR_HEIGHT;
+            maxClients -= n2;
+        }
+        n1 = CG_TeamScoreboard( y, TEAM_SPECTATOR, fade, maxClients, lineHeight );
+        y += (n1 * lineHeight) + BIGCHAR_HEIGHT;
 
-	} else {
-		//
-		// free for all scoreboard
-		//
-		n1 = CG_TeamScoreboard( y, TEAM_FREE, fade, maxClients, lineHeight );
-		y += (n1 * lineHeight) + BIGCHAR_HEIGHT;
-		n2 = CG_TeamScoreboard( y, TEAM_SPECTATOR, fade, maxClients - n1, lineHeight );
-		y += (n2 * lineHeight) + BIGCHAR_HEIGHT;
-	}
+    } else {
+        //
+        // free for all scoreboard
+        //
+        n1 = CG_TeamScoreboard( y, TEAM_FREE, fade, maxClients, lineHeight );
+        y += (n1 * lineHeight) + BIGCHAR_HEIGHT;
+        n2 = CG_TeamScoreboard( y, TEAM_SPECTATOR, fade, maxClients - n1, lineHeight );
+        y += (n2 * lineHeight) + BIGCHAR_HEIGHT;
+    }
 
-	if (!localClient) {
-		// draw local client at the bottom
-		for ( i = 0 ; i < cg.numScores ; i++ ) {
-			if ( cg.scores[i].client == cg.snap->ps.clientNum ) {
-				CG_DrawClientScore( y, &cg.scores[i], fadeColor, fade, lineHeight == SB_NORMAL_HEIGHT );
-				break;
-			}
-		}
-	}
+    if (!localClient) {
+        // draw local client at the bottom
+        for ( i = 0 ; i < cg.numScores ; i++ ) {
+            if ( cg.scores[i].client == cg.snap->ps.clientNum ) {
+                CG_DrawClientScore( y, &cg.scores[i], fadeColor, fade, lineHeight == SB_NORMAL_HEIGHT );
+                break;
+            }
+        }
+    }
 
 	// load any models that have been deferred
 	if ( ++cg.deferredPlayerLoading > 10 ) {

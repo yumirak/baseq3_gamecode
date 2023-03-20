@@ -2294,7 +2294,7 @@ static qboolean CG_DrawScoreboard( void ) {
 
 	return qtrue;
 #else
-	return CG_DrawOldScoreboard();
+    return CG_DrawOldScoreboard();
 #endif
 }
 
@@ -2500,10 +2500,11 @@ static void CG_DrawWarmup( void ) {
 		return;
 
 	s = va( "Starts in: %i", cg.warmupCount );
-
+    cw = 28;
+    /*
 	switch ( cg.warmupCount ) {
 	case 1:
-		cw = 28;
+        cw = 28;
 #ifdef MISSIONPACK
 		scale = 0.54f;
 #endif
@@ -2526,8 +2527,9 @@ static void CG_DrawWarmup( void ) {
 		scale = 0.45f;
 #endif
 		break;
-	}
 
+	}
+*/
 #ifdef MISSIONPACK
 	w = CG_Text_Width(s, scale, 0);
 	CG_Text_Paint(320 - w / 2, 125, scale, colorWhite, s, 0, 0, ITEM_TEXTSTYLE_SHADOWEDMORE);

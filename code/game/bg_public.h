@@ -20,8 +20,8 @@
 
 #define DEFAULT_SHOTGUN_SPREAD	700
 #define DEFAULT_SHOTGUN_COUNT	11
-#define NEW_SHOTGUN_COUNT	12
-#define MAX_SHOTGUN_COUNT	NEW_SHOTGUN_COUNT
+#define NEW_SHOTGUN_COUNT	20
+#define MAX_SHOTGUN_COUNT	22
 
 #define	ITEM_RADIUS			15		// item sizes are needed for client side pickup detection
 
@@ -151,6 +151,7 @@ typedef enum {
 
 typedef enum {
     MOVEMENT_VQ3 = 0,
+    MOVEMENT_VQL,
     MOVEMENT_CPM_DEFRAG,
     MOVEMENT_RM,
     MOVEMENT_CPM_CPMA,
@@ -213,7 +214,8 @@ typedef enum {
 	STAT_ARMOR,				
 	STAT_DEAD_YAW,					// look this direction when dead (FIXME: get rid of?)
 	STAT_CLIENTS_READY,				// bit mask of clients wishing to exit the intermission (FIXME: configstring?)
-	STAT_MAX_HEALTH					// health / armor limit, changable by handicap
+    STAT_MAX_HEALTH,					// health / armor limit, changable by handicap
+    STAT_JUMPTIME
 } statIndex_t;
 
 

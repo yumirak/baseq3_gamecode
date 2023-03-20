@@ -158,8 +158,11 @@ void SnapVectorTowards( vec3_t v, vec3_t to ) {
 #define CHAINGUN_SPREAD		600
 #endif
 #define MACHINEGUN_SPREAD	200
+#define MACHINEGUN_MAXAMMO	200
 #define	MACHINEGUN_DAMAGE	7
 #define	MACHINEGUN_TEAM_DAMAGE	5		// wimpier MG in teamplay
+#define	MACHINEGUN_DAMAGE_QL	5
+#define	MACHINEGUN_TEAM_DAMAGE_QL	4		// wimpier MG in teamplay
 
 static void Bullet_Fire( gentity_t *ent, float spread, int damage ) {
 	trace_t		tr;
@@ -518,7 +521,7 @@ void weapon_railgun_fire( gentity_t *ent ) {
 	int			passent;
 	gentity_t	*unlinkedEntities[MAX_RAIL_HITS];
 
-	damage = 100 * s_quadFactor;
+    damage = (g_movement.integer != MOVEMENT_VQ3 ? 80 : 100) * s_quadFactor;
 
 	VectorMA( muzzle_origin, 8192.0, forward, end );
 
@@ -691,7 +694,7 @@ void Weapon_LightningFire( gentity_t *ent ) {
 	gentity_t	*traceEnt, *tent;
 	int			damage, i, passent;
 
-	damage = 8 * s_quadFactor;
+    damage = (g_movement.integer == MOVEMENT_VQ3 ? 8 : 6) * s_quadFactor;
 
 	passent = ent->s.number;
 
@@ -895,9 +898,9 @@ void FireWeapon( gentity_t *ent ) {
 		break;
 	case WP_MACHINEGUN:
 		if ( g_gametype.integer != GT_TEAM ) {
-			Bullet_Fire( ent, MACHINEGUN_SPREAD, MACHINEGUN_DAMAGE );
+            Bullet_Fire( ent, MACHINEGUN_SPREAD, g_movement.integer == MOVEMENT_VQ3 ? MACHINEGUN_DAMAGE : MACHINEGUN_DAMAGE_QL );
 		} else {
-			Bullet_Fire( ent, MACHINEGUN_SPREAD, MACHINEGUN_TEAM_DAMAGE );
+            Bullet_Fire( ent, MACHINEGUN_SPREAD, g_movement.integer == MOVEMENT_VQ3 ? MACHINEGUN_TEAM_DAMAGE : MACHINEGUN_TEAM_DAMAGE_QL  );
 		}
 		break;
 	case WP_GRENADE_LAUNCHER:
