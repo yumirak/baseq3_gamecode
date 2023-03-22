@@ -208,7 +208,7 @@ vmCvar_t	cg_deadBodyDarken;
 vmCvar_t	cg_fovAdjust;
 vmCvar_t	cg_followKiller;
 vmCvar_t	cg_bobGun; // rat : bobgun
-
+vmCvar_t	cg_autojump;
 typedef struct {
 	vmCvar_t	*vmCvar;
 	const char	*cvarName;
@@ -339,7 +339,8 @@ static const cvarTable_t cvarTable[] = {
 	{ &cg_teamColors, "cg_teamColors", "", CVAR_ARCHIVE},
 	{ &cg_deadBodyDarken, "cg_deadBodyDarken", "1", CVAR_ARCHIVE},
 	{ &cg_fovAdjust, "cg_fovAdjust", "0", CVAR_ARCHIVE},
-	{ &cg_followKiller, "cg_followKiller", "0", CVAR_ARCHIVE}
+    { &cg_followKiller, "cg_followKiller", "0", CVAR_ARCHIVE},
+    { &cg_autojump, "cg_autojump", "0", CVAR_ARCHIVE  },
 };
 
 

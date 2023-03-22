@@ -1102,7 +1102,7 @@ static void CG_DrawUpperRight(stereoFrame_t stereoFrame)
 	if ( cg_drawSnapshot.integer ) {
 		y = CG_DrawSnapshot( y );
 	}
-	if (cg_drawFPS.integer && (stereoFrame == STEREO_CENTER || stereoFrame == STEREO_RIGHT)) {
+    if (cg_drawFPS.integer && (stereoFrame == STEREO_CENTER || stereoFrame == STEREO_RIGHT)) {
 		y = CG_DrawFPS( y );
 	}
 	if ( cg_drawSpeed.integer ) {

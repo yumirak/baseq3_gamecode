@@ -100,8 +100,7 @@ void TeleportPlayer( gentity_t *player, vec3_t origin, vec3_t angles ) {
         //player->client->ps.stats[STAT_JUMPTIME] = 0;
     }
     */
-    if( g_movement.integer == MOVEMENT_CPM_DEFRAG)
-            return;
+
 	// set angles
 	if ( angles )
 		SetClientViewAngle( player, angles );

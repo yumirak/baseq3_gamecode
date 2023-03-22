@@ -239,11 +239,16 @@ void PM_StepSlideMove( qboolean gravity ) {
 	down[2] -= PM_STEP_HEIGHT;
 	pm->trace (&trace, start_o, pm->mins, pm->maxs, down, pm->ps->clientNum, pm->tracemask);
 	VectorSet(up, 0, 0, 1);
-	// never step up when you still have up velocity
+    // almost never step up when you still have up velocity
+    if ( pm->ps->velocity[2] > PM_GetUpStepVelocityCap(pm) && (trace.fraction == 1.0 ||
+                                        DotProduct(trace.plane.normal, up) < 0.7)) {
+        return;
+    }
+    /* never step up when you still have up velocity
 	if ( pm->ps->velocity[2] > 0 && (trace.fraction == 1.0 ||
 										DotProduct(trace.plane.normal, up) < 0.7)) {
 		return;
-	}
+    }*/
 
 	//VectorCopy (pm->ps->origin, down_o);
 	//VectorCopy (pm->ps->velocity, down_v);

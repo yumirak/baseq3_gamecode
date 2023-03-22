@@ -365,11 +365,11 @@ static qboolean PM_CheckJump( void ) {
 	}
 
 	// must wait for jump to be released
-	if ( pm->ps->pm_flags & PMF_JUMP_HELD ) {
+    if ( pm->ps->pm_flags & PMF_JUMP_HELD ) {
 		// clear upmove so cmdscale doesn't lower running speed
 		pm->cmd.upmove = 0;
 		return qfalse;
-	}
+    }
 
 	pml.groundPlane = qfalse;		// jumping away
 	pml.walking = qfalse;
@@ -384,11 +384,13 @@ static qboolean PM_CheckJump( void ) {
         pm->ps->velocity[2] = JUMP_VELOCITY;
 
     // Double jump
-    if (pm->pmove_movement>= MOVEMENT_CPM_DEFRAG) {
-        if (pm->ps->stats[STAT_JUMPTIME] > 0)
-            pm->ps->velocity[2] += 100;
-        pm->ps->stats[STAT_JUMPTIME] = 400;
+    if (pm->ps->stats[STAT_JUMPTIME] > 0 && (pm->pmove_movement >= MOVEMENT_CPM_DEFRAG)) {
+        //float speed = sqrt(pml.forward[0]*pml.forward[0] + pml.forward[1]*pml.forward[1]);
+        //pm->ps->velocity[0] += (pml.forward[0]/speed)*80;
+        //pm->ps->velocity[1] += (pml.forward[1]/speed)*80;
+        pm->ps->velocity[2] += 100;
     }
+    pm->ps->stats[STAT_JUMPTIME] = 400;
 	PM_AddEvent( EV_JUMP );
 
 	if ( pm->cmd.forwardmove >= 0 ) {
@@ -1001,9 +1003,9 @@ static void PM_WalkMove( void ) {
 	}
 
 	// clamp the speed lower if wading or walking on the bottom
-	if ( pm->waterlevel ) {
+    if ( pm->waterlevel ) {
 
-		float	waterScale;
+        float	waterScale;
         /*
         if ((pm->pmove_movement != MOVEMENT_RM) || pm->waterlevel != 1) {
             waterScale = pm->waterlevel / 3.0;
@@ -1013,12 +1015,12 @@ static void PM_WalkMove( void ) {
             }
         }
         */
-		waterScale = pm->waterlevel / 3.0;
-		waterScale = 1.0 - ( 1.0 - pm_swimScale ) * waterScale;
-		if ( wishspeed > pm->ps->speed * waterScale ) {
-			wishspeed = pm->ps->speed * waterScale;
+        waterScale = pm->waterlevel / 3.0;
+        waterScale = 1.0 - ( 1.0 - pm_swimScale ) * waterScale;
+        if ( wishspeed > pm->ps->speed * waterScale ) {
+            wishspeed = pm->ps->speed * waterScale;
         }
-	}
+    }
 
     // when a player gets hit, they temporarily lose
 	// full control, which allows them to be moved a bit
