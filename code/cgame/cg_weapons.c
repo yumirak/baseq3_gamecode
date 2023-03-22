@@ -815,6 +815,16 @@ void CG_RegisterWeapon( int weaponNum ) {
 		weaponInfo->missileSound = trap_S_RegisterSound( "sound/weapons/rocket/rockfly.wav", qfalse );
 		break;
 
+    case WP_HMG:
+        MAKERGB( weaponInfo->flashDlightColor, 1, 1, 0 );
+        weaponInfo->flashSound[0] = trap_S_RegisterSound( "sound/weapons/hmg/machgf1b.wav", qfalse );
+        weaponInfo->flashSound[1] = trap_S_RegisterSound( "sound/weapons/hmg/machgf2b.wav", qfalse );
+        weaponInfo->flashSound[2] = trap_S_RegisterSound( "sound/weapons/hmg/machgf3b.wav", qfalse );
+        weaponInfo->flashSound[3] = trap_S_RegisterSound( "sound/weapons/hmg/machgf4b.wav", qfalse );
+        weaponInfo->ejectBrassFunc = CG_MachineGunEjectBrass;
+        cgs.media.bulletExplosionShader = trap_R_RegisterShader( "bulletExplosion" );
+        break;
+
 	 default:
 		MAKERGB( weaponInfo->flashDlightColor, 1, 1, 1 );
 		weaponInfo->flashSound[0] = trap_S_RegisterSound( "sound/weapons/rocket/rocklf1a.wav", qfalse );
@@ -2032,6 +2042,22 @@ void CG_MissileHitWall( weapon_t weapon, int clientNum, vec3_t origin, vec3_t di
 
 		radius = 8;
 		break;
+    case WP_HMG:
+        mod = cgs.media.bulletFlashModel;
+        shader = cgs.media.bulletExplosionShader;
+        mark = cgs.media.bulletMarkShader;
+
+        r = rand() & 3;
+        if ( r == 0 ) {
+            sfx = cgs.media.sfx_ric1;
+        } else if ( r == 1 ) {
+            sfx = cgs.media.sfx_ric2;
+        } else {
+            sfx = cgs.media.sfx_ric3;
+        }
+
+        radius = 8;
+        break;
 	}
 
 	if ( sfx ) {

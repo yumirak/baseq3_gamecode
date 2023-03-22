@@ -239,7 +239,8 @@ typedef enum {
 	PERS_DEFEND_COUNT,				// defend awards
 	PERS_ASSIST_COUNT,				// assist awards
 	PERS_GAUNTLET_FRAG_COUNT,		// kills with the gauntlet
-	PERS_CAPTURES					// captures
+    PERS_CAPTURES,					// captures
+    PERS_KILL
 } persEnum_t;
 
 
@@ -331,7 +332,7 @@ typedef enum {
 	WP_PROX_LAUNCHER,
 	WP_CHAINGUN,
 #endif
-
+    WP_HMG,
 	WP_NUM_WEAPONS,
 	WP_PENDING = WP_NUM_WEAPONS, // used in ui_players.c
 	WP_MAX_WEAPONS = 16
@@ -620,6 +621,7 @@ typedef enum {
 	MOD_KAMIKAZE,
 	MOD_JUICED,
 #endif
+    MOD_HMG,
 	MOD_GRAPPLE
 } meansOfDeath_t;
 

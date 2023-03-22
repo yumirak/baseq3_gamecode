@@ -1964,7 +1964,11 @@ static void PM_Weapon( void ) {
 	case WP_CHAINGUN:
 		addTime = 30;
 		break;
+
 #endif
+    case WP_HMG:
+        addTime = 75;
+        break;
 	}
 
 #ifdef MISSIONPACK

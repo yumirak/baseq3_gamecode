@@ -339,6 +339,7 @@ char	*modNames[] = {
 	"MOD_KAMIKAZE",
 	"MOD_JUICED",
 #endif
+    "MOD_HMG",
 	"MOD_GRAPPLE"
 };
 
@@ -569,6 +570,7 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 				attacker->client->rewardTime = level.time + REWARD_SPRITE_TIME;
 			}
 			attacker->client->lastKillTime = level.time;
+            attacker->client->ps.persistant[PERS_KILL]++;
 
 		}
 	} else {

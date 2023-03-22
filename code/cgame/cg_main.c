@@ -198,6 +198,7 @@ vmCvar_t	cg_obeliskRespawnDelay;
 #endif
 
 vmCvar_t	cg_hitSounds;
+vmCvar_t	cg_fragSounds;
 
 vmCvar_t	cg_enemyModel;
 vmCvar_t	cg_enemyColors;
@@ -333,6 +334,7 @@ static const cvarTable_t cvarTable[] = {
 	{ &cg_oldPlasma, "cg_oldPlasma", "1", CVAR_ARCHIVE},
 	{ &cg_trueLightning, "cg_trueLightning", "0.0", CVAR_ARCHIVE},
 	{ &cg_hitSounds, "cg_hitSounds", "0", CVAR_ARCHIVE},
+    { &cg_fragSounds, "cg_fragSounds", "0", CVAR_ARCHIVE},
 	{ &cg_enemyModel, "cg_enemyModel", "", CVAR_ARCHIVE},
 	{ &cg_enemyColors, "cg_enemyColors", "", CVAR_ARCHIVE},
 	{ &cg_teamModel, "cg_teamModel", "", CVAR_ARCHIVE},
@@ -702,6 +704,10 @@ static void CG_RegisterSounds( void ) {
 
 	cgs.media.hitSound = trap_S_RegisterSound( "sound/feedback/hit.wav", qfalse );
 
+    cgs.media.fragSounds[0] = trap_S_RegisterSound( "sound/feedback/chaching.wav", qtrue );
+    cgs.media.fragSounds[1] = trap_S_RegisterSound( "sound/feedback/bell_01.wav", qtrue );
+    cgs.media.fragSounds[2] = trap_S_RegisterSound( "sound/feedback/cash_register.wav", qtrue );
+    cgs.media.fragSounds[3] = trap_S_RegisterSound( "sound/feedback/cork_pop.wav", qtrue );
 #ifdef MISSIONPACK
 	cgs.media.hitSoundHighArmor = trap_S_RegisterSound( "sound/feedback/hithi.wav", qfalse );
 	cgs.media.hitSoundLowArmor = trap_S_RegisterSound( "sound/feedback/hitlo.wav", qfalse );

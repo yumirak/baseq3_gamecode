@@ -19,9 +19,9 @@ CONTROLS MENU
 
 typedef struct {
 	char	*command;
-	char	*label;
+    char	*label;
 	int		id;
-	int		anim;
+    int		anim;
 	int		defaultbind1;
 	int		defaultbind2;
 	int		bind1;
@@ -91,6 +91,11 @@ typedef struct
 #define ID_CHAT2		31
 #define ID_CHAT3		32
 #define ID_CHAT4		33
+#define ID_WEAPON10		34
+#define ID_WEAPON11		35
+#define ID_WEAPON12		36
+#define ID_WEAPON13 	37
+#define ID_WEAPON14		38
 
 // all others
 #define ID_FREELOOK		34
@@ -124,10 +129,14 @@ typedef struct
 #define ANIM_WEAPON8	19
 #define ANIM_WEAPON9	20
 #define ANIM_WEAPON10	21
-#define ANIM_ATTACK		22
-#define ANIM_GESTURE	23
-#define ANIM_DIE		24
-#define ANIM_CHAT		25
+#define ANIM_WEAPON11	22
+#define ANIM_WEAPON12	23
+#define ANIM_WEAPON13	24
+#define ANIM_WEAPON14	25
+#define ANIM_ATTACK		26
+#define ANIM_GESTURE	27
+#define ANIM_DIE		28
+#define ANIM_CHAT		29
 
 typedef struct
 {
@@ -162,6 +171,7 @@ typedef struct
 	menuaction_s		railgun;
 	menuaction_s		plasma;
 	menuaction_s		bfg;
+    menuaction_s		heavymachinegun;
 	menuaction_s		attack;
 	menuaction_s		prevweapon;
 	menuaction_s		nextweapon;
@@ -233,6 +243,7 @@ static bind_t g_bindings[] =
 	{"weapon 7",		"railgun",			ID_WEAPON7,		ANIM_WEAPON7,	'7',			-1,		-1, -1},
 	{"weapon 8",		"plasma gun",		ID_WEAPON8,		ANIM_WEAPON8,	'8',			-1,		-1, -1},
 	{"weapon 9",		"BFG",				ID_WEAPON9,		ANIM_WEAPON9,	'9',			-1,		-1, -1},
+    //{"weapon 9",		"BFG",				ID_WEAPON9,		ANIM_WEAPON9,	'9',			-1,		-1, -1},
 	{"+attack", 		"attack",			ID_ATTACK,		ANIM_ATTACK,	K_CTRL,			-1,		-1, -1},
 	{"weapprev",		"prev weapon",		ID_WEAPPREV,	ANIM_IDLE,		'[',			-1,		-1, -1},
 	{"weapnext", 		"next weapon",		ID_WEAPNEXT,	ANIM_IDLE,		']',			-1,		-1, -1},
@@ -286,7 +297,8 @@ static menucommon_s *g_weapons_controls[] = {
 	(menucommon_s *)&s_controls.lightning,   
 	(menucommon_s *)&s_controls.railgun,          
 	(menucommon_s *)&s_controls.plasma,           
-	(menucommon_s *)&s_controls.bfg,              
+    (menucommon_s *)&s_controls.bfg,
+    //(menucommon_s *)&s_controls.heavymachinegun,
 	NULL,
 };
 
@@ -500,6 +512,10 @@ static void Controls_UpdateModel( int anim ) {
 		s_controls.playerWeapon = WP_GRAPPLING_HOOK;
 		break;
 
+    /*case ANIM_WEAPON14:
+        s_controls.playerWeapon = WP_HMG;
+        break;
+    */
 	case ANIM_ATTACK:
 		s_controls.playerTorso = TORSO_ATTACK;
 		break;
@@ -1374,7 +1390,13 @@ static void Controls_MenuInit( void )
 	s_controls.bfg.generic.callback  = Controls_ActionEvent;
 	s_controls.bfg.generic.ownerdraw = Controls_DrawKeyBinding;
 	s_controls.bfg.generic.id        = ID_WEAPON9;
-
+    /*
+    s_controls.heavymachinegun.generic.type	     = MTYPE_ACTION;
+    s_controls.heavymachinegun.generic.flags     = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
+    s_controls.heavymachinegun.generic.callback  = Controls_ActionEvent;
+    s_controls.heavymachinegun.generic.ownerdraw = Controls_DrawKeyBinding;
+    s_controls.heavymachinegun.generic.id        = ID_WEAPON14;
+*/
 	s_controls.attack.generic.type	    = MTYPE_ACTION;
 	s_controls.attack.generic.flags     = QMF_LEFT_JUSTIFY|QMF_PULSEIFFOCUS|QMF_GRAYED|QMF_HIDDEN;
 	s_controls.attack.generic.callback  = Controls_ActionEvent;
@@ -1589,6 +1611,7 @@ static void Controls_MenuInit( void )
 	Menu_AddItem( &s_controls.menu, &s_controls.railgun );
 	Menu_AddItem( &s_controls.menu, &s_controls.plasma );
 	Menu_AddItem( &s_controls.menu, &s_controls.bfg );
+    //Menu_AddItem( &s_controls.menu, &s_controls.heavymachinegun );
 
 	Menu_AddItem( &s_controls.menu, &s_controls.showscores );
 	Menu_AddItem( &s_controls.menu, &s_controls.useitem );

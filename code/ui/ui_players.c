@@ -120,6 +120,9 @@ tryagain:
 	case WP_GRAPPLING_HOOK:
 		MAKERGB( pi->flashDlightColor, 0.6f, 0.6f, 1 );
 		break;
+    case WP_HMG:
+        MAKERGB( pi->flashDlightColor, 1, 1, 0 );
+        break;
 
 	default:
 		MAKERGB( pi->flashDlightColor, 1, 1, 1 );

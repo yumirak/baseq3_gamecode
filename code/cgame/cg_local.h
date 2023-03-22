@@ -927,6 +927,7 @@ typedef struct {
 
 	sfxHandle_t hitSound;
 	sfxHandle_t hitSounds[4];
+    sfxHandle_t fragSounds[4];
 #ifdef MISSIONPACK
 	sfxHandle_t hitSoundHighArmor;
 	sfxHandle_t hitSoundLowArmor;
@@ -1265,6 +1266,7 @@ extern	vmCvar_t		cg_obeliskRespawnDelay;
 #endif
 
 extern	vmCvar_t		cg_hitSounds;
+extern	vmCvar_t		cg_fragSounds;
 
 extern	vmCvar_t		cg_enemyModel;
 extern	vmCvar_t		cg_enemyColors;

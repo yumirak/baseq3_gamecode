@@ -314,6 +314,10 @@ static void CG_Obituary( entityState_t *ent ) {
 			message = "was juiced by";
 			break;
 #endif
+        case MOD_HMG:
+            message = "was heavy machinegunned by";
+            break;
+
 		case MOD_TELEFRAG:
 			message = "tried to invade";
 			message2 = "'s personal space";
