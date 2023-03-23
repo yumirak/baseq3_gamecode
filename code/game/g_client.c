@@ -933,7 +933,7 @@ void ClientBegin( int clientNum ) {
 			G_BroadcastServerCommand( -1, va("print \"%s" S_COLOR_WHITE " entered the game\n\"", client->pers.netname) );
 		}
 	}
-	
+    SendReadymask( ent-g_entities );
 	client->pers.inGame = qtrue;
 
 	G_LogPrintf( "ClientBegin: %i\n", clientNum );
@@ -968,6 +968,7 @@ void ClientSpawn(gentity_t *ent) {
 	int		eventSequence;
 	char	userinfo[MAX_INFO_STRING];
 	qboolean isSpectator;
+    qboolean ready;
 
 	index = ent - g_entities;
 	client = ent->client;
@@ -1025,7 +1026,7 @@ void ClientSpawn(gentity_t *ent) {
 	client->saved.leveltime = 0;
 
 	// clear everything but the persistant data
-
+    ready = client->ready;
 	saved = client->pers;
 	savedSess = client->sess;
 	savedPing = client->ps.ping;
@@ -1038,7 +1039,7 @@ void ClientSpawn(gentity_t *ent) {
 	eventSequence = client->ps.eventSequence;
 
 	Com_Memset (client, 0, sizeof(*client));
-
+    client->ready = ready;
 	client->pers = saved;
 	client->sess = savedSess;
 	client->ps.ping = savedPing;
@@ -1248,7 +1249,7 @@ void ClientDisconnect( int clientNum ) {
 	G_ClearClientSessionData( ent->client );
 
 	CalculateRanks();
-
+    SendReadymask( -1 );
 	if ( ent->r.svFlags & SVF_BOT ) {
 		BotAIShutdownClient( clientNum, qfalse );
 	}

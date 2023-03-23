@@ -712,7 +712,7 @@ static int Team_TouchOurFlag( gentity_t *ent, gentity_t *other, team_t team ) {
 	}
 	else {
 #endif
-	if (cl->sess.sessionTeam == TEAM_RED) {
+    if (cl->sess.sessionTeam == TEAM_RED) {
 		enemy_flag = PW_BLUEFLAG;
 	} else {
 		enemy_flag = PW_REDFLAG;

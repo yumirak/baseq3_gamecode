@@ -1666,8 +1666,31 @@ static void CG_DrawReward( void ) {
     }
     trap_R_SetColor( NULL );
 }
+/*
+===================
+CG_DrawReady
+===================
+*/
+static void CG_DrawReady ( void ) {
+    char *s;
+    int w;
+    float char_width, char_height;
+
+    if ( !cgs.startWhenReady )
+        return;
+    if ( cg.warmup >= 0 )
+        return;
+
+    if ( cg.readyMask & ( 1 << cg.snap->ps.clientNum ) ) {
+        s = "You are ready!";
+    } else {
+        s = "Type \\ready to ready up!";
+    }
 
 
+    CG_DrawString( 320,90,s, colorWhite, BIGCHAR_WIDTH, BIGCHAR_HEIGHT, 0, DS_PROPORTIONAL | DS_CENTER | DS_SHADOW );
+
+}
 /*
 ===============================================================================
 
@@ -2657,6 +2680,8 @@ static void CG_Draw2D( stereoFrame_t stereoFrame )
 	cg.scoreBoardShowing = CG_DrawScoreboard();
 	if ( !cg.scoreBoardShowing ) {
 		CG_DrawCenterString();
+        if ( cgs.clientinfo[cg.clientNum].team != TEAM_SPECTATOR )
+            CG_DrawReady();
 	}
 
 	if ( cgs.score_catched ) {

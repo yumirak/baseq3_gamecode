@@ -46,6 +46,7 @@ vmCvar_t	g_weaponTeamRespawn;
 vmCvar_t	g_motd;
 vmCvar_t	g_synchronousClients;
 vmCvar_t	g_warmup;
+vmCvar_t	g_doWarmup;
 vmCvar_t	g_predictPVS;
 //vmCvar_t	g_restarted;
 vmCvar_t	g_log;
@@ -68,6 +69,11 @@ vmCvar_t    g_damagePlums; // rat damageplums
 vmCvar_t    g_movement; // rat : cpm
 vmCvar_t	g_vampire; // OA : vampire
 vmCvar_t	g_vampireMaxHealth;
+
+vmCvar_t    g_startWhenReady;
+vmCvar_t        g_autoStartTime;
+vmCvar_t        g_autoStartMinPlayers;
+
 #ifdef MISSIONPACK
 vmCvar_t	g_obeliskHealth;
 vmCvar_t	g_obeliskRegenPeriod;
@@ -114,6 +120,8 @@ static cvarTable_t gameCvarTable[] = {
 	{ &g_teamForceBalance, "g_teamForceBalance", "0", CVAR_ARCHIVE  },
 
 	{ &g_warmup, "g_warmup", "20", CVAR_ARCHIVE, 0, qtrue  },
+    { &g_doWarmup, "g_doWarmup", "0", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue  },
+
 	{ &g_log, "g_log", "games.log", CVAR_ARCHIVE, 0, qfalse  },
 	{ &g_logSync, "g_logSync", "0", CVAR_ARCHIVE, 0, qfalse  },
 
@@ -173,7 +181,11 @@ static cvarTable_t gameCvarTable[] = {
 	{ &pmove_fixed, "pmove_fixed", "0", CVAR_SYSTEMINFO, 0, qfalse},
 	{ &pmove_msec, "pmove_msec", "8", CVAR_SYSTEMINFO, 0, qfalse},
 
-	{ &g_rotation, "g_rotation", "", CVAR_ARCHIVE, 0, qfalse }
+    { &g_rotation, "g_rotation", "", CVAR_ARCHIVE, 0, qfalse },
+
+    { &g_startWhenReady, "g_startWhenReady", "0", CVAR_ARCHIVE | CVAR_SERVERINFO, 0, qfalse },
+    { &g_autoStartTime, "g_autoStartTime", "0", CVAR_ARCHIVE, 0, qfalse },
+    { &g_autoStartMinPlayers, "g_autoStartMinPlayers", "0", CVAR_ARCHIVE, 0, qfalse }
 
 };
 
@@ -238,7 +250,10 @@ DLLEXPORT intptr_t vmMain( int command, int arg0, int arg1, int arg2 ) {
 	return -1;
 }
 
-
+qboolean G_AutoStartReady( void ) {
+    return	level.numPlayingClients >= g_autoStartMinPlayers.integer
+        && (g_autoStartTime.integer > 0 && g_autoStartTime.integer*1000 < (level.time - level.startTime));
+}
 void QDECL G_Printf( const char *fmt, ... ) {
 	va_list		argptr;
 	char		text[BIG_INFO_STRING];
@@ -1738,6 +1753,20 @@ static void CheckTournament( void ) {
 		// if all players have arrived, start the countdown
 		if ( level.warmupTime < 0 ) {
 			if ( level.numPlayingClients == 2 ) {
+                if ( ( g_startWhenReady.integer &&
+                       ( g_entities[level.sortedClients[0]].client->ready || ( g_entities[level.sortedClients[0]].r.svFlags & SVF_BOT ) ) &&
+                       ( g_entities[level.sortedClients[1]].client->ready || ( g_entities[level.sortedClients[1]].r.svFlags & SVF_BOT ) )
+                      ) || !g_startWhenReady.integer || !g_doWarmup.integer || G_AutoStartReady()) {
+                    // fudge by -1 to account for extra delays
+                    if ( g_warmup.integer > 1 ) {
+                        level.warmupTime = level.time + ( g_warmup.integer - 1 ) * 1000;
+                    } else {
+                        level.warmupTime = 0;
+                    }
+
+                    trap_SetConfigstring( CS_WARMUP, va("%i", level.warmupTime) );
+                }
+                /*
 				if ( g_warmup.integer > 0 ) {
 					level.warmupTime = level.time + g_warmup.integer * 1000;
 				} else {
@@ -1745,6 +1774,7 @@ static void CheckTournament( void ) {
 				}
 
 				trap_SetConfigstring( CS_WARMUP, va("%i", level.warmupTime) );
+                */
 			}
 			return;
 		}
@@ -1757,6 +1787,10 @@ static void CheckTournament( void ) {
 	} else if ( g_gametype.integer != GT_SINGLE_PLAYER && level.warmupTime != 0 ) {
 		int		counts[TEAM_NUM_TEAMS];
 		qboolean	notEnough = qfalse;
+        int i;
+        int clientsReady = 0;
+        int clientsReadyRed = 0;
+        int clientsReadyBlue = 0;
 
 		if ( g_gametype.integer >= GT_TEAM ) {
 			counts[TEAM_BLUE] = TeamConnectedCount( -1, TEAM_BLUE );
@@ -1768,6 +1802,39 @@ static void CheckTournament( void ) {
 		} else if ( level.numPlayingClients < 2 ) {
 			notEnough = qtrue;
 		}
+        if( g_startWhenReady.integer ){
+            for( i = 0; i < level.numPlayingClients; i++ ){
+                if( ( g_entities[level.sortedClients[i]].client->ready || g_entities[level.sortedClients[i]].r.svFlags & SVF_BOT )  ) {
+                    clientsReady++;
+                    switch (g_entities[level.sortedClients[i]].client->sess.sessionTeam) {
+                        case TEAM_RED:
+                            clientsReadyRed++;
+                            break;
+                        case TEAM_BLUE:
+                            clientsReadyBlue++;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+
+        if ( g_doWarmup.integer && g_startWhenReady.integer == 1 && ( clientsReady < level.numPlayingClients/2 + 1 )&& !G_AutoStartReady()) {
+            notEnough = qtrue;
+        }
+        else if ( g_doWarmup.integer && g_startWhenReady.integer == 2 && ( clientsReady < level.numPlayingClients )&& !G_AutoStartReady()) {
+            notEnough = qtrue;
+        }
+        else if ( g_doWarmup.integer && g_startWhenReady.integer == 3 && !G_AutoStartReady()) {
+            if (g_gametype.integer >= GT_TEAM) {
+                if ( clientsReadyRed < counts[TEAM_RED]/2 + 1  && clientsReadyBlue < counts[TEAM_BLUE]/2 + 1)
+                    notEnough = qtrue;
+            }
+            else if (( clientsReady < level.numPlayingClients/2 + 1 ))
+                notEnough = qtrue;
+        }
+
 
 		if ( notEnough ) {
 			if ( level.warmupTime != -1 ) {
@@ -1790,13 +1857,14 @@ static void CheckTournament( void ) {
 
 		// if all players have arrived, start the countdown
 		if ( level.warmupTime < 0 ) {
-			if ( g_warmup.integer > 0 ) {
+            /*if ( g_warmup.integer > 0 ) {
 				level.warmupTime = level.time + g_warmup.integer * 1000;
 			} else {
 				level.warmupTime = 0;
-			}
-
+            }*/
+            level.warmupTime = level.time + g_warmup.integer * 1000;
 			trap_SetConfigstring( CS_WARMUP, va("%i", level.warmupTime) );
+
 			return;
 		}
 

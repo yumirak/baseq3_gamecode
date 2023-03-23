@@ -262,7 +262,7 @@ struct gclient_s {
 	clientSession_t		sess;
 
 	qboolean	readyToExit;		// wishes to leave the intermission
-
+    qboolean	ready;		// wishes to start the game
 	qboolean	noclip;
 
 	int			lastCmdTime;		// level.time of last usercmd_t, for EF_CONNECTION
@@ -423,6 +423,8 @@ typedef struct {
 	vec3_t		intermission_angle;
 	qboolean	intermission_spot;
 
+    int		readyMask;
+
 	qboolean	locationLinked;			// target_locations get linked
 	gentity_t	*locationHead;			// head of the location list
 	int			bodyQueIndex;			// dead bodies
@@ -466,7 +468,7 @@ void BroadcastTeamChange( gclient_t *client, team_t oldTeam );
 qboolean SetTeam( gentity_t *ent, const char *s );
 void Cmd_FollowCycle_f( gentity_t *ent, int dir );
 void G_RevertVote( gclient_t *client );
-
+void SendReadymask(int clientnum);
 //
 // g_items.c
 //
@@ -762,7 +764,7 @@ extern	vmCvar_t	g_mapname;
 extern	vmCvar_t	sv_fps;
 extern	vmCvar_t	g_dedicated;
 extern	vmCvar_t	g_cheats;
-//extern vmCvar_t	g_maxclients;			// allow this many total, including spectators
+extern  vmCvar_t	g_maxclients;			// allow this many total, including spectators
 extern	vmCvar_t	g_maxGameClients;		// allow this many active
 //extern	vmCvar_t	g_restarted;
 
@@ -787,6 +789,7 @@ extern	vmCvar_t	g_weaponTeamRespawn;
 extern	vmCvar_t	g_synchronousClients;
 extern	vmCvar_t	g_motd;
 extern	vmCvar_t	g_warmup;
+extern	vmCvar_t	g_doWarmup;
 extern	vmCvar_t	g_blood;
 extern	vmCvar_t	g_allowVote;
 extern	vmCvar_t	g_autoJoin;
@@ -814,6 +817,8 @@ extern  vmCvar_t    g_damagePlums; // rat damageplum
 extern  vmCvar_t    g_movement; // rat : cpm
 extern  vmCvar_t	g_vampire; // OA : vampire
 extern  vmCvar_t	g_vampireMaxHealth;
+extern  vmCvar_t    g_startWhenReady;
+
 void	trap_Print( const char *text );
 void	trap_Error( const char *text );
 int		trap_Milliseconds( void );
@@ -1031,4 +1036,3 @@ extern int dll_com_trapGetValue;
 #endif
 
 extern	int svf_self_portal2;
-

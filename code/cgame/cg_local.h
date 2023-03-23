@@ -686,7 +686,7 @@ typedef struct {
 
 	int				followTime;
 	int				followClient;
-
+    int             readyMask; // rat : readymask
 	qboolean		skipDFshaders;
 } cg_t;
 
@@ -1149,6 +1149,7 @@ typedef struct {
 	float			cursorX;
 	float			cursorY;
     movement_t	movement;
+    int		startWhenReady;
 } cgs_t;
 
 //==============================================================================

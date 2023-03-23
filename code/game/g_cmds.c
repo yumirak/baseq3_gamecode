@@ -1791,6 +1791,67 @@ static void Cmd_Stats_f( gentity_t *ent ) {
 */
 }
 
+/*
+==================
+SendReadymask
+
+sends the readymask to the player with clientnum, if clientnum = -1 its send to every player
+==================
+*/
+
+void SendReadymask( int clientnum ) {
+    int			ready, notReady, playerCount;
+    int			i;
+    gclient_t	*cl;
+    int			readyMask;
+    char		entry[16];
+
+    if ( !level.warmupTime ) {
+        return;
+    }
+
+    // see which players are ready
+    ready = 0;
+    notReady = 0;
+    readyMask = 0;
+    playerCount = 0;
+
+    for ( i = 0; i < g_maxclients.integer; i++ ) {
+        cl = level.clients + i;
+        if ( cl->pers.connected != CON_CONNECTED || cl->sess.sessionTeam == TEAM_SPECTATOR ) {
+            continue;
+        }
+
+        playerCount++;
+        if ( cl->ready || ( g_entities[i].r.svFlags & SVF_BOT ) ) {
+            ready++;
+            if ( i < 32 ) {
+                readyMask |= 1 << i;
+            }
+        } else {
+            notReady++;
+        }
+    }
+
+    level.readyMask = readyMask;
+    Com_sprintf (entry, sizeof(entry), " %i ", readyMask);
+
+    trap_SendServerCommand( clientnum, va("readyMask%s", entry ));
+}
+
+void Cmd_Ready_f( gentity_t *ent ) {
+    if (level.warmupTime != -1) {
+        return;
+    }
+
+    if (!g_startWhenReady.integer) {
+        return;
+    }
+
+    ent->client->ready = !ent->client->ready;
+
+    SendReadymask(-1);
+}
 
 /*
 =================
@@ -1889,16 +1950,16 @@ void ClientCommand( int clientNum ) {
 		Cmd_FollowCycle_f (ent, 1);
 	else if (Q_stricmp (cmd, "followprev") == 0)
 		Cmd_FollowCycle_f (ent, -1);
-	else if (Q_stricmp (cmd, "team") == 0)
+    else if (Q_stricmp (cmd, "team") == 0)
 		Cmd_Team_f (ent);
 	else if (Q_stricmp (cmd, "where") == 0)
 		Cmd_Where_f (ent);
 	else if (Q_stricmp (cmd, "callvote") == 0)
 		Cmd_CallVote_f (ent);
 	else if (Q_stricmp (cmd, "vote") == 0)
-		Cmd_Vote_f (ent);
+        Cmd_Vote_f (ent);
 	else if (Q_stricmp (cmd, "callteamvote") == 0)
-		Cmd_CallTeamVote_f (ent);
+        Cmd_CallTeamVote_f (ent);
 	else if (Q_stricmp (cmd, "teamvote") == 0)
 		Cmd_TeamVote_f (ent);
 	else if (Q_stricmp (cmd, "gc") == 0)
@@ -1907,6 +1968,8 @@ void ClientCommand( int clientNum ) {
 		Cmd_SetViewpos_f( ent );
 	else if (Q_stricmp (cmd, "stats") == 0)
 		Cmd_Stats_f( ent );
+    else if (Q_stricmp (cmd, "ready") == 0)
+        Cmd_Ready_f( ent );
 	else
 		trap_SendServerCommand( clientNum, va( "print \"unknown cmd %s\n\"", cmd ) );
 }

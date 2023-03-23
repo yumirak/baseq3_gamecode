@@ -205,7 +205,7 @@ static void CG_DrawClientScore( int y, score_t *score, float *color, float fade,
 	CG_DrawString( SB_SCORELINE_X + (SB_RATING_WIDTH / 2) + BIGCHAR_WIDTH*16, y, ci->name, c, BIGCHAR_WIDTH, BIGCHAR_HEIGHT, 0, DS_SHADOW | DS_PROPORTIONAL );
 
 	// add the "ready" marker for intermission exiting
-	if ( cg.snap->ps.stats[ STAT_CLIENTS_READY ] & ( 1 << score->client ) ) {
+    if ( cg.snap->ps.stats[ STAT_CLIENTS_READY ] & ( 1 << score->client ) || cg.warmup < 0 && ci->team != TEAM_SPECTATOR && cgs.startWhenReady && cg.readyMask & ( 1 << score->client )) {
 		CG_DrawString( iconx, y, "READY", color, BIGCHAR_WIDTH, BIGCHAR_HEIGHT, 0, DS_SHADOW | DS_FORCE_COLOR );
 	}
 
