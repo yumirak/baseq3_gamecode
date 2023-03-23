@@ -1281,6 +1281,7 @@ extern	vmCvar_t		cg_followKiller;
 extern  vmCvar_t		cg_damagePlums; // rat : damageplum
 extern  vmCvar_t		cg_damagePlumSize;
 extern  vmCvar_t		cg_bobGun; // rat : bobgun
+extern	vmCvar_t		cg_fragmsgsize;
 extern const char		*eventnames[EV_MAX];
 
 
