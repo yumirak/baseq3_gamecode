@@ -570,7 +570,7 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 				attacker->client->rewardTime = level.time + REWARD_SPRITE_TIME;
 			}
 			attacker->client->lastKillTime = level.time;
-            attacker->client->ps.persistant[PERS_KILL]++;
+            //->client->ps.persistant[PERS_KILL]++;
 
 		}
 	} else {

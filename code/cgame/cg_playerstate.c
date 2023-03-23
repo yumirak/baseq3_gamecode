@@ -326,7 +326,7 @@ void CG_CheckLocalSounds( playerState_t *ps, playerState_t *ops ) {
 	if ( cg.intermissionStarted ) {
 		return;
 	}
-    if (ps->persistant[PERS_KILL] != ops->persistant[PERS_KILL]) {
+    if (ps->persistant[PERS_SCORE] != ops->persistant[PERS_SCORE]) {
         int index;
         index = cg_fragSounds.integer;
         trap_S_StartLocalSound(cgs.media.fragSounds[index - 1], CHAN_ANNOUNCER);

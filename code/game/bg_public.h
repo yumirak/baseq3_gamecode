@@ -239,8 +239,8 @@ typedef enum {
 	PERS_DEFEND_COUNT,				// defend awards
 	PERS_ASSIST_COUNT,				// assist awards
 	PERS_GAUNTLET_FRAG_COUNT,		// kills with the gauntlet
-    PERS_CAPTURES,					// captures
-    PERS_KILL
+    PERS_CAPTURES					// captures
+    //PERS_KILL
 } persEnum_t;
 
 
