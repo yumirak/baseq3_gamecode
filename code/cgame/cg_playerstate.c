@@ -329,7 +329,9 @@ void CG_CheckLocalSounds( playerState_t *ps, playerState_t *ops ) {
     if (ps->persistant[PERS_SCORE] != ops->persistant[PERS_SCORE]) {
         int index;
         index = cg_fragSounds.integer;
-        trap_S_StartLocalSound(cgs.media.fragSounds[index - 1], CHAN_ANNOUNCER);
+        // demo playback will play fallback sound (hitsound) if set cg_fragsounds set to 0
+        if(cg_fragSounds.integer >= 1)
+            trap_S_StartLocalSound(cgs.media.fragSounds[index - 1], CHAN_ANNOUNCER);
     }
 	// reward sounds
     reward = qfalse;
