@@ -912,9 +912,19 @@ static float CG_DrawTimer( float y ) {
 	seconds -= mins * 60;
 
 	s = va( "%i:%02i", mins, seconds );
-	CG_DrawString( cgs.screenXmax - 4, y + 2, s, colorWhite, BIGCHAR_WIDTH, BIGCHAR_HEIGHT, 0, DS_SHADOW | DS_RIGHT | DS_PROPORTIONAL );
+    //
+    switch (cg_drawTimerPos.integer){
+    case 1:
+        CG_DrawString( 320, cgs.screenYmin + 5, s, colorWhite, (int)(BIGCHAR_WIDTH * cg_drawTimerSize.value) ,(int)(BIGCHAR_HEIGHT * cg_drawTimerSize.value) , 0, DS_SHADOW | DS_CENTER | DS_PROPORTIONAL );
+        return y;
+        break;
+    default:
+        CG_DrawString( cgs.screenXmax - 4, y + 2, s, colorWhite, BIGCHAR_WIDTH, BIGCHAR_HEIGHT, 0, DS_SHADOW | DS_RIGHT | DS_PROPORTIONAL );
+        return y + BIGCHAR_HEIGHT + 4;
+        break;
+    }
 
-	return y + BIGCHAR_HEIGHT + 4;
+
 }
 
 

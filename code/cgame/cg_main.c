@@ -212,6 +212,9 @@ vmCvar_t	cg_bobGun; // rat : bobgun
 vmCvar_t	cg_autojump;
 vmCvar_t	cg_fragmsgsize;
 
+vmCvar_t    cg_drawTimerPos;
+vmCvar_t    cg_drawTimerSize;
+
 typedef struct {
 	vmCvar_t	*vmCvar;
 	const char	*cvarName;
@@ -346,6 +349,9 @@ static const cvarTable_t cvarTable[] = {
     { &cg_followKiller, "cg_followKiller", "0", CVAR_ARCHIVE},
     { &cg_autojump, "cg_autojump", "0", CVAR_ARCHIVE  },
     { &cg_fragmsgsize, "cg_fragmsgsize", "0.6", CVAR_ARCHIVE},
+
+    { &cg_drawTimerPos, "cg_drawTimerPos", "0", CVAR_ARCHIVE},
+    { &cg_drawTimerSize, "cg_drawTimerSize", "1", CVAR_ARCHIVE},
 };
 
 
