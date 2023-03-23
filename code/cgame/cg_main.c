@@ -334,7 +334,7 @@ static const cvarTable_t cvarTable[] = {
 	{ &cg_oldPlasma, "cg_oldPlasma", "1", CVAR_ARCHIVE},
 	{ &cg_trueLightning, "cg_trueLightning", "0.0", CVAR_ARCHIVE},
 	{ &cg_hitSounds, "cg_hitSounds", "0", CVAR_ARCHIVE},
-    { &cg_fragSounds, "cg_fragSounds", "0", CVAR_ARCHIVE},
+    { &cg_fragSounds, "cg_fragSounds", "0", CVAR_USERINFO|CVAR_ARCHIVE},
 	{ &cg_enemyModel, "cg_enemyModel", "", CVAR_ARCHIVE},
 	{ &cg_enemyColors, "cg_enemyColors", "", CVAR_ARCHIVE},
 	{ &cg_teamModel, "cg_teamModel", "", CVAR_ARCHIVE},
@@ -708,6 +708,9 @@ static void CG_RegisterSounds( void ) {
     cgs.media.fragSounds[1] = trap_S_RegisterSound( "sound/feedback/bell_01.wav", qtrue );
     cgs.media.fragSounds[2] = trap_S_RegisterSound( "sound/feedback/cash_register.wav", qtrue );
     cgs.media.fragSounds[3] = trap_S_RegisterSound( "sound/feedback/cork_pop.wav", qtrue );
+    cgs.media.fragSounds[4] = trap_S_RegisterSound( "sound/feedback/coin-collect-b.wav", qtrue );
+    cgs.media.fragSounds[5] = trap_S_RegisterSound( "sound/feedback/chime1.wav", qfalse );
+
 #ifdef MISSIONPACK
 	cgs.media.hitSoundHighArmor = trap_S_RegisterSound( "sound/feedback/hithi.wav", qfalse );
 	cgs.media.hitSoundLowArmor = trap_S_RegisterSound( "sound/feedback/hitlo.wav", qfalse );

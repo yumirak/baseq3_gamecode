@@ -927,7 +927,7 @@ typedef struct {
 
 	sfxHandle_t hitSound;
 	sfxHandle_t hitSounds[4];
-    sfxHandle_t fragSounds[4];
+    sfxHandle_t fragSounds[6];
 #ifdef MISSIONPACK
 	sfxHandle_t hitSoundHighArmor;
 	sfxHandle_t hitSoundLowArmor;
