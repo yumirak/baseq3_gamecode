@@ -547,7 +547,7 @@ void CG_DrawString( float x, float y, const char *string, const vec4_t setColor,
 	const font_metric_t *fm;
 	const float		*tc; // texture coordinates for char
 	float			ax, ay, aw, aw1, ah; // absolute positions/dimensions
-	float			scale;
+    float			scale;
 	float			x_end, xx;
 	vec4_t			color;
 	const byte		*s;
@@ -590,12 +590,12 @@ void CG_DrawString( float x, float y, const char *string, const vec4_t setColor,
 		xx = ax;
 
 		// calculate shadow offsets
-		scale = charWidth * 0.075f; // charWidth/15
-		xx_add = scale * cgs.screenXScale;
-		yy_add = scale * cgs.screenYScale;
+        scale = charWidth * 0.075f; // charWidth/15
+        xx_add = scale * cgs.screenXScale;
+        yy_add = scale * cgs.screenYScale;
 
 		color[0] = color[1] = color[2] = 0.0f;
-		color[3] = setColor[3] * 0.5f;
+        color[3] = setColor[3] * 0.5f;
 		trap_R_SetColor( color );
 
 		while ( *s != '\0' ) {

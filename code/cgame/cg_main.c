@@ -906,11 +906,11 @@ static void CG_RegisterGraphics( void ) {
         cgs.media.numberShaders[i] = trap_R_RegisterShaderNoMip( sb_nums[i] );
     }
 
-	cgs.media.botSkillShaders[0] = trap_R_RegisterShader( "menu/art/skill1.tga" );
-	cgs.media.botSkillShaders[1] = trap_R_RegisterShader( "menu/art/skill2.tga" );
-	cgs.media.botSkillShaders[2] = trap_R_RegisterShader( "menu/art/skill3.tga" );
-	cgs.media.botSkillShaders[3] = trap_R_RegisterShader( "menu/art/skill4.tga" );
-	cgs.media.botSkillShaders[4] = trap_R_RegisterShader( "menu/art/skill5.tga" );
+    cgs.media.botSkillShaders[0] = trap_R_RegisterShaderNoMip( "menu/art/skill1.tga" );
+    cgs.media.botSkillShaders[1] = trap_R_RegisterShaderNoMip( "menu/art/skill2.tga" );
+    cgs.media.botSkillShaders[2] = trap_R_RegisterShaderNoMip( "menu/art/skill3.tga" );
+    cgs.media.botSkillShaders[3] = trap_R_RegisterShaderNoMip( "menu/art/skill4.tga" );
+    cgs.media.botSkillShaders[4] = trap_R_RegisterShaderNoMip( "menu/art/skill5.tga" );
 
 	cgs.media.viewBloodShader = trap_R_RegisterShader( "viewBloodBlend" );
 
@@ -928,8 +928,8 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.nailPuffShader = trap_R_RegisterShader( "nailtrail" );
 	cgs.media.blueProxMine = trap_R_RegisterModel( "models/weaphits/proxmineb.md3" );
 #endif
-	cgs.media.plasmaBallShader = trap_R_RegisterShader( "sprites/plasma1" );
-	cgs.media.bloodTrailShader = trap_R_RegisterShader( "bloodTrail" );
+    cgs.media.plasmaBallShader = trap_R_RegisterShader( "sprites/plasma1" );
+    cgs.media.bloodTrailShader = trap_R_RegisterShader( "bloodTrail" );
 	cgs.media.lagometerShader = trap_R_RegisterShader("lagometer" );
 	cgs.media.connectionShader = trap_R_RegisterShader( "disconnected" );
 
@@ -939,11 +939,11 @@ static void CG_RegisterGraphics( void ) {
 	cgs.media.selectShader = trap_R_RegisterShader( "gfx/2d/select" );
 
 	for ( i = 0 ; i < NUM_CROSSHAIRS ; i++ ) {
-		cgs.media.crosshairShader[i] = trap_R_RegisterShader( va("gfx/2d/crosshair%c", 'a'+i) );
+        cgs.media.crosshairShader[i] = trap_R_RegisterShaderNoMip( va("gfx/2d/crosshair%c", 'a'+i) );
 	}
 
-	cgs.media.backTileShader = trap_R_RegisterShader( "gfx/2d/backtile" );
-	cgs.media.noammoShader = trap_R_RegisterShader( "icons/noammo" );
+    cgs.media.backTileShader = trap_R_RegisterShaderNoMip( "gfx/2d/backtile" );
+    cgs.media.noammoShader = trap_R_RegisterShaderNoMip( "icons/noammo" );
 
 	// powerup shaders
 	cgs.media.quadShader = trap_R_RegisterShader("powerups/quad" );

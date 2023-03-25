@@ -652,9 +652,9 @@ static void CG_DrawStatusBar( void ) {
 				}
 			}
 #ifdef USE_NEW_FONT_RENDERER
-			CG_SelectFont( 1 );
-            CG_DrawString( CHAR_WIDTH*3, y, va( "%i", value ), colors[ color ], CHAR_WIDTH, CHAR_HEIGHT, 0, DS_SHADOW |DS_RIGHT | DS_PROPORTIONAL );
-			CG_SelectFont( 0 );
+            CG_SelectFont( 1 );
+            CG_DrawString( CHAR_WIDTH*3, y, va( "%i", value ), colors[ color ], CHAR_WIDTH, CHAR_HEIGHT, 0, DS_RIGHT | DS_PROPORTIONAL );
+            CG_SelectFont( 0 );
 #else
 			trap_R_SetColor( colors[color] );
 			CG_DrawField( 0, y, 3, value );
@@ -689,9 +689,9 @@ static void CG_DrawStatusBar( void ) {
     CG_DrawStatusBarHead( 185 + CHAR_WIDTH*3 + TEXT_ICON_SPACE );
     //CG_DrawPic( 185 + CHAR_WIDTH*3 + TEXT_ICON_SPACE, y, ICON_SIZE, ICON_SIZE, cgs.media.healthIcon );
 #ifdef USE_NEW_FONT_RENDERER
-	CG_SelectFont( 1 );
-    CG_DrawString( 185 + CHAR_WIDTH*3, y, va( "%i", value ), colors[ color ], CHAR_WIDTH, CHAR_HEIGHT, 0, DS_SHADOW | DS_RIGHT | DS_PROPORTIONAL );
-	CG_SelectFont( 0 );
+    CG_SelectFont( 1 );
+    CG_DrawString( 185 + CHAR_WIDTH*3, y, va( "%i", value ), colors[ color ], CHAR_WIDTH, CHAR_HEIGHT, 0,  DS_RIGHT | DS_PROPORTIONAL );
+    CG_SelectFont( 0 );
 #else
 	trap_R_SetColor( colors[ color ] );
 	// stretch the health up when taking damage
@@ -707,9 +707,9 @@ static void CG_DrawStatusBar( void ) {
 	value = ps->stats[STAT_ARMOR];
 	if ( value > 0 ) {
 #ifdef USE_NEW_FONT_RENDERER
-		CG_SelectFont( 1 );
-        CG_DrawString( 370 + CHAR_WIDTH*3, y, va( "%i", value ), colors[ color ], CHAR_WIDTH, CHAR_HEIGHT, 0, DS_SHADOW | DS_RIGHT | DS_PROPORTIONAL );
-		CG_SelectFont( 0 );
+        CG_SelectFont( 1 );
+        CG_DrawString( 370 + CHAR_WIDTH*3, y, va( "%i", value ), colors[ color ], CHAR_WIDTH, CHAR_HEIGHT, 0,  DS_RIGHT | DS_PROPORTIONAL );
+        CG_SelectFont( 0 );
 #else
 		trap_R_SetColor( colors[0] );
 		CG_DrawField( 370, y, 3, value );
@@ -887,7 +887,7 @@ static float CG_DrawFPS( float y ) {
 		}
 		fps = 1000 * FPS_FRAMES / total;
 
-        s = va( "%iFPS", fps );
+        s = va( "%ifps", fps );
 		CG_DrawString( cgs.screenXmax - 4, y + 2, s, colorWhite, BIGCHAR_WIDTH, BIGCHAR_HEIGHT, 0, DS_SHADOW | DS_RIGHT | DS_PROPORTIONAL );
 	}
 
@@ -905,6 +905,9 @@ static float CG_DrawTimer( float y ) {
 	int			mins, seconds;
 	int			msec;
 
+    if ( cg.warmupCount > 0 || cg.warmup <= 0)
+        return;
+
 	msec = cg.time - cgs.levelStartTime;
 
 	seconds = msec / 1000;
@@ -915,7 +918,7 @@ static float CG_DrawTimer( float y ) {
     //
     switch (cg_drawTimerPos.integer){
     case 1:
-        CG_DrawString( 320, cgs.screenYmin + 5, s, colorWhite, (int)(BIGCHAR_WIDTH * cg_drawTimerSize.value) ,(int)(BIGCHAR_HEIGHT * cg_drawTimerSize.value) , 0, DS_SHADOW | DS_CENTER | DS_PROPORTIONAL );
+        CG_DrawString( 320, cgs.screenYmin + 5, s, colorWhite, (int)(BIGCHAR_WIDTH * cg_drawTimerSize.value) ,(int)(BIGCHAR_HEIGHT * cg_drawTimerSize.value) , 0,  DS_CENTER | DS_PROPORTIONAL );
         return y;
         break;
     default:
@@ -2463,7 +2466,7 @@ static void CG_DrawWarmup( void ) {
 	}
 
 	if ( cg.warmup < 0 ) {
-		CG_DrawString( 320,24, "Waiting for players", colorWhite, BIGCHAR_WIDTH, BIGCHAR_HEIGHT, 0,
+        CG_DrawString( 320,70, "Waiting for players", colorWhite, BIGCHAR_WIDTH, BIGCHAR_HEIGHT, 0,
 			DS_PROPORTIONAL | DS_CENTER | DS_SHADOW );
 		return;
 	}
@@ -2533,7 +2536,7 @@ static void CG_DrawWarmup( void ) {
 		return;
 
 	s = va( "Starts in: %i", cg.warmupCount );
-    cw = 28;
+    cw = 24;
     /*
 	switch ( cg.warmupCount ) {
 	case 1:
