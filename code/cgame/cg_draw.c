@@ -653,7 +653,7 @@ static void CG_DrawStatusBar( void ) {
 			}
 #ifdef USE_NEW_FONT_RENDERER
             CG_SelectFont( 1 );
-            CG_DrawString( CHAR_WIDTH*3, y, va( "%i", value ), colors[ color ], CHAR_WIDTH, CHAR_HEIGHT, 0, DS_RIGHT | DS_PROPORTIONAL );
+            CG_DrawString( CHAR_WIDTH*3, y, va( "%i", value ), colors[ color ], CHAR_WIDTH, CHAR_HEIGHT, 0, DS_SHADOW | DS_RIGHT | DS_PROPORTIONAL );
             CG_SelectFont( 0 );
 #else
 			trap_R_SetColor( colors[color] );
@@ -690,7 +690,7 @@ static void CG_DrawStatusBar( void ) {
     //CG_DrawPic( 185 + CHAR_WIDTH*3 + TEXT_ICON_SPACE, y, ICON_SIZE, ICON_SIZE, cgs.media.healthIcon );
 #ifdef USE_NEW_FONT_RENDERER
     CG_SelectFont( 1 );
-    CG_DrawString( 185 + CHAR_WIDTH*3, y, va( "%i", value ), colors[ color ], CHAR_WIDTH, CHAR_HEIGHT, 0,  DS_RIGHT | DS_PROPORTIONAL );
+    CG_DrawString( 185 + CHAR_WIDTH*3, y, va( "%i", value ), colors[ color ], CHAR_WIDTH, CHAR_HEIGHT, 0,  DS_SHADOW | DS_RIGHT | DS_PROPORTIONAL );
     CG_SelectFont( 0 );
 #else
 	trap_R_SetColor( colors[ color ] );
@@ -708,7 +708,7 @@ static void CG_DrawStatusBar( void ) {
 	if ( value > 0 ) {
 #ifdef USE_NEW_FONT_RENDERER
         CG_SelectFont( 1 );
-        CG_DrawString( 370 + CHAR_WIDTH*3, y, va( "%i", value ), colors[ color ], CHAR_WIDTH, CHAR_HEIGHT, 0,  DS_RIGHT | DS_PROPORTIONAL );
+        CG_DrawString( 370 + CHAR_WIDTH*3, y, va( "%i", value ), colors[ color ], CHAR_WIDTH, CHAR_HEIGHT, 0, DS_SHADOW | DS_RIGHT | DS_PROPORTIONAL );
         CG_SelectFont( 0 );
 #else
 		trap_R_SetColor( colors[0] );
@@ -905,7 +905,7 @@ static float CG_DrawTimer( float y ) {
 	int			mins, seconds;
 	int			msec;
 
-    if ( cg.warmupCount > 0 || cg.warmup <= 0)
+    if ( cg.warmupCount > 0)
         return;
 
 	msec = cg.time - cgs.levelStartTime;
@@ -918,7 +918,7 @@ static float CG_DrawTimer( float y ) {
     //
     switch (cg_drawTimerPos.integer){
     case 1:
-        CG_DrawString( 320, cgs.screenYmin + 5, s, colorWhite, (int)(BIGCHAR_WIDTH * cg_drawTimerSize.value) ,(int)(BIGCHAR_HEIGHT * cg_drawTimerSize.value) , 0,  DS_CENTER | DS_PROPORTIONAL );
+        CG_DrawString( 320, cgs.screenYmin + 2, s, colorWhite, (int)(BIGCHAR_WIDTH * cg_drawTimerSize.value) ,(int)(BIGCHAR_HEIGHT * cg_drawTimerSize.value) , 0,  DS_CENTER | DS_PROPORTIONAL );
         return y;
         break;
     default:
@@ -1244,7 +1244,7 @@ static float CG_DrawScores( float y ) {
 	} else {
 		qboolean	spectator;
 
-		x = cgs.screenXmax + 1;
+        x = cgs.screenXmax + 1;
 
 		score = cg.snap->ps.persistant[PERS_SCORE];
 		spectator = ( cg.snap->ps.persistant[PERS_TEAM] == TEAM_SPECTATOR );
@@ -1659,12 +1659,12 @@ static void CG_DrawReward( void ) {
 	count = cg.rewardCount[0] - count*10;		// number of small rewards to draw
 	*/
 
-    if ( cg.rewardCount[0] >= 2 ) {
+    if ( cg.rewardCount[0] >= 10 ) {
         y = 56; // FIXME: cgs.screenYmin + 56?
         x = 320 - ICON_SIZE/2;
         CG_DrawPic( x, y, ICON_SIZE-4, ICON_SIZE-4, cg.rewardShader[0] );
         Com_sprintf( buf, sizeof( buf ), "%d", cg.rewardCount[0] );
-        CG_DrawString( 320, y + ICON_SIZE, buf, color, SMALLCHAR_WIDTH, SMALLCHAR_HEIGHT, 0, DS_SHADOW | DS_CENTER | DS_PROPORTIONAL );
+        CG_DrawString( 320, y + ICON_SIZE, buf, color, BIGCHAR_WIDTH / 2, BIGCHAR_HEIGHT / 2, 0, DS_SHADOW | DS_CENTER | DS_PROPORTIONAL );
     }
     else {
 
@@ -2404,7 +2404,7 @@ static void CG_DrawAmmoWarning( void ) {
 		s = "LOW AMMO WARNING";
 	}
 
-	CG_DrawString( 320, 64, s, colorWhite, BIGCHAR_WIDTH, BIGCHAR_HEIGHT, 0, DS_PROPORTIONAL | DS_CENTER | DS_SHADOW );
+    CG_DrawString( 320, 64, s, colorWhite, BIGCHAR_WIDTH, BIGCHAR_HEIGHT, 0, DS_PROPORTIONAL | DS_CENTER | DS_SHADOW );
 }
 
 

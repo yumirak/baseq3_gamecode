@@ -441,3 +441,23 @@ icons/iconr_green
 	}
 }
 
+
+lightningBoltNew3
+{
+	cull none
+	sort additive
+	{
+		map gfx/2d/lightningminimal.tga
+		blendFunc GL_ONE GL_ONE
+		rgbgen wave sin 0.4 0 0 1.0
+                 tcmod scale  1 1
+		tcMod scroll -5 0
+	}
+    {
+		map gfx/2d/lightningminimal.tga
+		blendFunc GL_ONE GL_ONE
+                rgbgen wave sin 0.4 0 0 1.0
+                 tcmod scale  1 1
+		tcMod scroll -7.2 0
+	}
+}

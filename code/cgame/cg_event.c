@@ -858,7 +858,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position, int entityNum ) {
 	// weapon events
 	//
 	case EV_NOAMMO:
-//		trap_S_StartSound (NULL, es->number, CHAN_AUTO, cgs.media.noAmmoSound );
+        //trap_S_StartSound (NULL, es->number, CHAN_AUTO, cgs.media.noAmmoSound );
 		if ( es->number == cg.snap->ps.clientNum ) {
 			CG_OutOfAmmoChange();
 		}

@@ -29,22 +29,25 @@ void CG_CheckAmmo( void ) {
 		}
 		switch ( i ) {
 		case WP_ROCKET_LAUNCHER:
+            total = cg.snap->ps.ammo[WP_ROCKET_LAUNCHER] * 1000;
+            break;
 		case WP_GRENADE_LAUNCHER:
 		case WP_RAILGUN:
 		case WP_SHOTGUN:
 #ifdef MISSIONPACK
 		case WP_PROX_LAUNCHER:
 #endif
-			total += cg.snap->ps.ammo[i] * 1000;
+            //total = cg.snap->ps.ammo[i] * 1000;
 			break;
 		default:
-			total += cg.snap->ps.ammo[i] * 200;
+            //total = cg.snap->ps.ammo[i] * 200;
 			break;
 		}
-		if ( total >= 5000 ) {
+        if ( total >= 5000 ) {
 			cg.lowAmmoWarning = 0;
 			return;
 		}
+
 	}
 
 	previous = cg.lowAmmoWarning;
