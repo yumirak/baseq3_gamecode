@@ -713,13 +713,8 @@ static void CG_SetColorInfo( const char *color, clientInfo_t *info )
 	CG_ColorFromChar( color[4], info->color2 );
 }
 
-static const int CG_ToBase7(int number){
-    if(number == 0)
-        return number;
-    return (number % 7) + 10*CG_ToBase7(number / 7);
-}
 
-static const char *CG_GetColors( const char *color, team_t team, int clientNum ) {
+static const char *CG_GetTeamColors( const char *color, team_t team ) {
 	static char str[6];
 
 	Q_strncpyz( str, color, sizeof( str ) );
@@ -730,15 +725,6 @@ static const char *CG_GetColors( const char *color, team_t team, int clientNum )
 		case TEAM_FREE: replace1( '?', '7', str ); break;
 		default: break;
     }
-
-	if ( !strcmp(color,"cid") ) {
-		if (clientNum < 7) {
-			return va("00%i",clientNum);
-		}
-		else {
-			return va("0%i",CG_ToBase7(clientNum));
-		}
-	}
 
 	return str;
 }
@@ -1033,9 +1019,9 @@ static void CG_SetSkinAndModel( clientInfo_t *newInfo,
 
 				if ( setColor ) {
 					if ( cg_enemyColors.string[0] && myTeam != TEAM_SPECTATOR ) // free-fly?
-						colors = CG_GetColors( cg_enemyColors.string, newInfo->team, clientNum );
+						colors = CG_GetTeamColors( cg_enemyColors.string, newInfo->team );
 					else
-						colors = CG_GetColors( "???", newInfo->team, clientNum );
+						colors = CG_GetTeamColors( "???", newInfo->team );
 
 					CG_SetColorInfo( colors, newInfo );
 					newInfo->coloredSkin = qtrue;
@@ -1064,9 +1050,9 @@ static void CG_SetSkinAndModel( clientInfo_t *newInfo,
 
 				if ( setColor ) {
 					if ( cg_teamColors.string[0] && myTeam != TEAM_SPECTATOR ) // free-fly?
-						colors = CG_GetColors( cg_teamColors.string, newInfo->team, clientNum );
+						colors = CG_GetTeamColors( cg_teamColors.string, newInfo->team );
 					else
-						colors = CG_GetColors( "???", newInfo->team, clientNum );
+						colors = CG_GetTeamColors( "???", newInfo->team );
 
 					CG_SetColorInfo( colors, newInfo );
 					newInfo->coloredSkin = qtrue;
@@ -1115,7 +1101,7 @@ static void CG_SetSkinAndModel( clientInfo_t *newInfo,
 					Q_strncpyz( modelName, "sarge", modelNameSize );
 
 				if ( setColor ) {
-					colors = CG_GetColors( cg_enemyColors.string, newInfo->team, clientNum );
+					colors = CG_GetTeamColors( cg_enemyColors.string, newInfo->team );
 					CG_SetColorInfo( colors, newInfo );
 					newInfo->coloredSkin = qtrue;
 				}
@@ -1133,7 +1119,7 @@ static void CG_SetSkinAndModel( clientInfo_t *newInfo,
 				}
 
 				if ( setColor ) {
-					colors = CG_GetColors( cg_enemyColors.string, newInfo->team, clientNum );
+					colors = CG_GetTeamColors( cg_enemyColors.string, newInfo->team );
 					CG_SetColorInfo( colors, newInfo );
 					newInfo->coloredSkin = qtrue;
 				}
@@ -1275,7 +1261,7 @@ void CG_NewClientInfo( int clientNum ) {
 	// always apply team colors [4] and [5] if specified, this will work in non-team games too
 	if ( cg_teamColors.string[0] && team != TEAM_SPECTATOR ) {
 		if ( allowNativeModel || ( ( team == TEAM_RED || team == TEAM_BLUE ) && team == myTeam && ( clientNum != myClientNum || cg.demoPlayback ) ) ) {
-			v = CG_GetColors( cg_teamColors.string, team, clientNum );
+			v = CG_GetTeamColors( cg_teamColors.string, team );
 			len = strlen( v );
 			if ( len >= 4 )
 				CG_ColorFromChar( v[3], newInfo.color1 );
